@@ -1,0 +1,51 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/listContainer"
+    android:layout_width="match_parent"
+    android:layout_height="90dp"
+    android:orientation="horizontal"
+    android:baselineAligned="true"
+    android:background="#f5f5f5" >
+
+    <TextView
+        android:id="@+id/date"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:textSize="12sp"
+        android:paddingBottom="15dp"
+        android:text="29"
+        android:gravity="center"
+        android:textColor="#181818" />
+
+    <TextView
+        android:id="@+id/place"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        android:paddingLeft="30dp"
+        android:paddingTop="2dp"
+        android:text="新宿Motion"
+        android:textColor="#ee6557" />
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="9sp"
+        android:paddingLeft="30dp"
+        android:paddingTop="18dp"
+        android:maxLines="2"
+        android:text="イベントタイトル / イベントタイトル / イベントタイトル / イベントタイトル / イベントタイトル / イベントタイトル / イベントタイトル / イベントタイトル / イベントタイトル / イベントタイトル / イベントタイトル / イベントタイトル / イベントタイトル / イベントタイトル / イベントタイトル / イベントタイトル / イベントタイトル / イベントタイトル / "
+        android:textColor="#16a6b6" />
+
+    <TextView
+        android:id="@+id/act"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="10sp"
+        android:paddingLeft="30dp"
+        android:paddingTop="43dp"
+        android:maxLines="3"
+        android:text="出演者 / 出演者 / 出演者 / 出演者 / 出演者 / 出演者 / 出演者 / 出演者 / 出演者 / 出演者 / 出演者 / 出演者 / 出演者 / 出演者 / 出演者 / 出演者 / 出演者 / 出演者 / 出演者 / 出演者 / 出演者 / 出演者 / 出演者 / 出演者 / 出演者 / 出演者 / 出演者 / 出演者 / 出演者 / 出演者 / 出演者 / 出演者 / 出演者 / 出演者 / 出演者 / 出演者 / 出演者 / 出演者 / 出演者 / 出演者 / 出演者 / 出演者 / 出演者 / 出演者 / 出演者 / 出演者 / 出演者 / 出演者 / 出演者 / 出演者 / 出演者 / 出演者 / "
+        android:textColor="#181818" />
+</RelativeLayout>
