@@ -1,16 +1,44 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical" >
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
 
-    <ListView android:id="@+id/list"
+    <!-- The main content view -->
+
+    <fragment
+        android:name="jp.wmyt.test.app.LiveListFragment"
+        android:id="@+id/livelist_fragment"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="fill_parent"/>
 
-    <android.support.v4.view.ViewPager xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/pager"
-        android:layout_width="match_parent"
+    <!-- The navigation drawer -->
+
+    <LinearLayout
+        android:id="@+id/left_drawer"
+        android:layout_width="240dp"
         android:layout_height="match_parent"
-        tools:context="jp.wmyt.test.app.MainActivity" />
-</LinearLayout>
+        android:layout_gravity="left"
+        android:background="#333"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/drawer_button"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:text="今日のライブ" />
+
+        <Button
+            android:id="@+id/drawer_button_a"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:text="ライブハウス一覧" />
+
+        <Button
+            android:id="@+id/drawer_button_b"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:text="お気に入り" />
+    </LinearLayout>
+
+</android.support.v4.widget.DrawerLayout>

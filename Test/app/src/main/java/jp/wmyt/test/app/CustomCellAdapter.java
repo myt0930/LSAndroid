@@ -40,7 +40,7 @@ public class CustomCellAdapter extends ArrayAdapter<CustomCell> {
 
         //- メッセージのセット
         TextView listMessageTextView = (TextView) convertView.findViewById(R.id.title);
-        listMessageTextView .setText("イベントタイトルvol.3\nイベントタイトル");
+        listMessageTextView .setText("イベントタイトル\nイベントタイトル");
 
         TextView dateText = (TextView) convertView.findViewById(R.id.date);
         dateText.setGravity(Gravity.CENTER);

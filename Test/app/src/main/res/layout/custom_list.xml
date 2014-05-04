@@ -13,7 +13,7 @@
         android:layout_height="match_parent"
         android:textSize="12sp"
         android:paddingBottom="15dp"
-        android:text="29"
+        android:text="5"
         android:gravity="center"
         android:textColor="#181818" />
 
@@ -24,7 +24,7 @@
         android:textSize="12sp"
         android:paddingLeft="30dp"
         android:paddingTop="2dp"
-        android:text="新宿Motion"
+        android:text="ライブハウス名"
         android:textColor="#ee6557" />
 
     <TextView
@@ -46,6 +46,6 @@
         android:paddingLeft="30dp"
         android:paddingTop="43dp"
         android:maxLines="3"
-        android:text="出演者 / 出演者 / 出演者 / 出演者 / 出演者 / 出演者 / 出演者 / 出演者 / 出演者 / 出演者 / 出演者 / 出演者 / 出演者 / 出演者 / 出演者 / 出演者 / 出演者 / 出演者 / 出演者 / 出演者 / 出演者 / 出演者 / 出演者 / 出演者 / 出演者 / 出演者 / 出演者 / 出演者 / 出演者 / 出演者 / 出演者 / 出演者 / 出演者 / 出演者 / 出演者 / 出演者 / 出演者 / 出演者 / 出演者 / 出演者 / 出演者 / 出演者 / 出演者 / 出演者 / 出演者 / 出演者 / 出演者 / 出演者 / 出演者 / 出演者 / 出演者 / 出演者 / "
+        android:text="出演者 / 出演者 / 出演者 / 出演者 \n出演者 / 出演者 / 出演者 / 出演者 \n出演者 / 出演者 / 出演者 / 出演者 "
         android:textColor="#181818" />
 </RelativeLayout>
