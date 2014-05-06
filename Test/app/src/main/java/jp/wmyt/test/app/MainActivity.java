@@ -1,11 +1,11 @@
 package jp.wmyt.test.app;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.res.Configuration;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
@@ -19,23 +19,19 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
-import java.net.URL;
 
 public class MainActivity extends Activity implements View.OnClickListener {
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout mDrawer;
     static String LOGTAG = "";
+    ProgressDialog progressDialog;
 
     private static final String TAG = "DownloadActivity";
     private static final String URL = "https://s3-ap-northeast-1.amazonaws.com/tokyolive/master.bin";
     static final String DOWNLOAD_FILE_URL = "https://s3-ap-northeast-1.amazonaws.com/tokyolive/";
+    static final String VERSION_FILE = "version.bin";
+    static final String MASTER_FILE = "master.bin";
+
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,6 +76,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
         getActionBar().setDisplayHomeAsUpEnabled(true);
         // UpNavigationを有効に
         getActionBar().setHomeButtonEnabled(true);
+
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setTitle("Loading...");
     }
 
     @Override
@@ -112,12 +111,59 @@ public class MainActivity extends Activity implements View.OnClickListener {
     protected void onStart() {
         super.onStart();
 
-        String[] srcFiles = { "version.bin","master.bin" };
-        // ローカルに保存するディレクトリ名
-        String dstDir = MainActivity.this.getApplicationInfo().dataDir + File.separator;
 
-        AsyncDownloadTask task = new AsyncDownloadTask( srcFiles, dstDir );
-        task.execute(0);
+
+        //version.binを取得
+            //更新なし→loadMast
+            //更新あり→更新ダイアログ表示
+                //master.binをDL
+                    //loadMast
+
+    }
+
+    private String makeTempPath(String fileName){
+        return MainActivity.this.getApplicationInfo().dataDir + File.separator + fileName + ".tmp";
+    }
+
+    private void checkUpdateMaster(){
+
+        final String srcFile = VERSION_FILE;
+        // ローカルに保存するディレクトリ名
+        final String dstFile = makeTempPath(srcFile);
+        AsyncDownloadTask task = new AsyncDownloadTask( srcFile, dstFile, new AsyncDownloadTask.AsyncDownloadCallback() {
+            @Override
+            public void preExecute() {
+                //インディケータ表示
+                progressDialog.show();
+            }
+            @Override
+            public void callbackExecute(int result){
+                progressDialog.dismiss();
+
+                File versionFile = new File(dstFile);
+
+                if(result == 0){
+
+                }else{
+
+                }
+            }
+        });
+    }
+
+    private void showNeedUpdateDialog(){
+        // Dialog 表示
+        AlertDialog.Builder progress = new AlertDialog.Builder( MainActivity.this );
+        progress.setTitle("データ更新");
+        progress.setMessage("ライブ情報の更新を行います。");
+        progress.setPositiveButton("OK",
+                new DialogInterface.OnClickListener(){
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                });
+        progress.show();
     }
 
     @Override
@@ -167,228 +213,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
             TextView textView = (TextView) rootView.findViewById(R.id.section_label);
             textView.setText(Integer.toString(getArguments().getInt(ARG_SECTION_NUMBER)));
             return rootView;
-        }
-    }
-
-    private class AsyncDownloadTask extends AsyncTask<Integer, Integer, Integer> {
-        ProgressDialog progress = null;
-        Integer[] nFileSize;						// ファイルサイズ
-        Integer nFileSizeCount = 0;					// ファイルの現在状況
-        Integer nTotalFileSize = 0;
-        Integer nTotalFileSizeCount = 0;
-
-        String[] srcFiles;
-        String dstDir;
-
-        AsyncDownloadTask( String[] src, String dst ) {
-            srcFiles = src;
-            dstDir = dst;
-        }
-
-        /**
-         * 前処理
-         */
-        @Override
-        public void onPreExecute()
-        {
-            // Dialog 表示
-            this.progress = new ProgressDialog( MainActivity.this );
-            this.progress.setMessage( "Downloading ..." );
-            this.progress.setButton(
-                    DialogInterface.BUTTON_NEGATIVE,
-                    "Cancel",
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            // TODO Auto-generated method stub
-                            AsyncDownloadTask.this.cancel( false );
-                        }
-                    }
-            );
-            this.progress.setIndeterminate( false );
-            this.progress.setProgressStyle( ProgressDialog.STYLE_HORIZONTAL );
-            this.progress.setMax( 0 );
-            this.progress.setProgress( 0 );
-            this.progress.setSecondaryProgress( 0 );
-            this.progress.show();
-        }
-
-        /**
-         * バックグラウンド処理
-         */
-        @Override
-        protected Integer doInBackground(Integer... params) {
-            int max = srcFiles.length;
-            nFileSize = new Integer[ max ];
-            // ファイルの各サイズと合計サイズを取得
-            for( int i = 0; i < max; i++ ) {
-                try {
-                    URL url = new URL( DOWNLOAD_FILE_URL + srcFiles[ i ].toString() );
-                    HttpURLConnection httpURLConnection = (HttpURLConnection)url.openConnection();
-
-                    // ダウンロードするファイルのサイズを取得
-                    httpURLConnection.setRequestMethod( "HEAD" );
-                    httpURLConnection.connect();
-                    if( httpURLConnection.getResponseCode() == 200 ) {
-                        this.nFileSize[ i ] = httpURLConnection.getContentLength();
-                        this.nTotalFileSize += (int)this.nFileSize[ i ];
-                    }
-                    httpURLConnection.disconnect();
-                    url = null;
-                } catch( MalformedURLException e ) {
-                    e.printStackTrace();
-                } catch( ProtocolException e ) {
-                    e.printStackTrace();
-                } catch( IOException e ) {
-                    e.printStackTrace();
-                } finally {}
-            }
-
-            // ファイルをダウンロード
-            for( int i = 0; i < max; i++ ) {
-                // 完了フラグ
-                boolean bComplete = false;
-                boolean bCancel = false;
-
-                // ファイル検査
-                File downFile = new File( dstDir.toString() + srcFiles[ i ].toString() );
-                if( downFile.exists() )
-                    this.nFileSizeCount = (int)downFile.length();
-                downFile = null;
-                // 読み込み終了している場合は次のファイルへ
-                if( this.nFileSizeCount == (int)this.nFileSize[ i ] ) {
-                    this.nTotalFileSizeCount += (int)this.nFileSize[ i ];
-//                    continue;
-                }
-
-                // ダウンロード先のテンポラリ
-                File temporary = new File( dstDir.toString() + srcFiles[ i ].toString() + ".tmp" );
-                if( temporary.exists() ) {
-                    this.nFileSizeCount = (int)temporary.length();
-                }else{
-                    this.nFileSizeCount = 0;
-
-                    // ダウンロード用に新規ファイルを作成
-                    try {
-                        temporary.createNewFile();
-                    } catch ( IOException e ) {
-                        e.printStackTrace();
-                    }
-                }
-
-                try {
-                    URL url = new URL( DOWNLOAD_FILE_URL + srcFiles[ i ].toString() );
-                    HttpURLConnection httpURLConnection = (HttpURLConnection)url.openConnection();
-
-                    // 実際のダウンロード処理
-                    httpURLConnection.setRequestMethod( "GET" );
-                    httpURLConnection.setRequestProperty(
-                            "Range",
-                            String.format( "byte=%d-%d", this.nFileSizeCount, (int)this.nFileSize[ i ] )
-                    );
-                    httpURLConnection.connect();
-
-                    // データのダウンロードを開始
-                    int code = httpURLConnection.getResponseCode();
-                    if( ( code == 200 ) || ( code == 206 ) ) {
-                        // HTTP 通信の内容をファイルに保存するためのストリームを生成
-                        InputStream inputStream = httpURLConnection.getInputStream();
-                        FileOutputStream fileOutputStream = new FileOutputStream( temporary, true );
-
-                        byte[] buffReadBytes = new byte[ 4096 ];
-                        for( int sizeReadBytes = inputStream.read( buffReadBytes); sizeReadBytes != -1; sizeReadBytes = inputStream.read( buffReadBytes ) ) {
-                            // ファイルに書き出し
-                            fileOutputStream.write( buffReadBytes, 0, sizeReadBytes );
-
-                            // 進捗状況を更新する処理
-                            this.nFileSizeCount += sizeReadBytes;
-                            this.publishProgress( this.nTotalFileSizeCount + this.nFileSizeCount );
-
-                            // キャンセルされているのであればフラグを立てて抜ける
-                            if( this.isCancelled() ) {
-                                bCancel = true;
-                                break;
-                            }
-                        }
-                        fileOutputStream.close();
-                    }
-
-                    // ダウンロードの完了フラグを立てる
-                    bComplete = true;
-                } catch( MalformedURLException e ) {
-                    e.printStackTrace();
-                } catch( ProtocolException e ) {
-                    e.printStackTrace();
-                } catch( IOException e ) {
-                    e.printStackTrace();
-                } finally {
-                    // ダウンロードが無事に完了しているのであればリネームする
-                    if( bComplete ) {
-                        if( !bCancel ) {
-                            temporary.renameTo( new File( dstDir.toString() + srcFiles[ i ].toString() ) );
-                            this.nTotalFileSizeCount += this.nFileSizeCount;
-                        }
-                    }
-
-                    try{
-                        File file = new File(dstDir.toString() + "master.bin");
-                        FileInputStream in = new FileInputStream(file);
-                        LoadData loadData  = new LoadData(in);
-
-                        int programVersion = loadData.getInt32();
-                        int masterCount = loadData.getInt16();
-                        for(int j = 0;j < masterCount;j++){
-                            int masterType = loadData.getInt16();
-                            switch (masterType){
-                                case 1:
-                                    LiveInfoTrait.getInstance().loadMast(loadData);
-                                    break;
-                                case 2:
-                                    LiveHouseTrait.getInstance().loadMast(loadData);
-                                    break;
-                                default:
-                                    break;
-                            }
-                        }
-                    }catch(Exception e4){
-                        e4.printStackTrace();
-                    }
-                }
-            }
-
-            // TODO Auto-generated method stub
-            return 0;
-        }
-
-        /**
-         * 進捗処理
-         */
-        @Override
-        protected void onProgressUpdate( Integer...integers ) {
-            this.progress.setMax( this.nTotalFileSize );
-            this.progress.setProgress( this.nTotalFileSizeCount + this.nFileSizeCount );
-        }
-
-        /**
-         * キャンセル
-         */
-        protected void onCancelled() {
-            // ProgressDialog の削除
-            if( this.progress != null ) {
-                this.progress.dismiss();
-                this.progress = null;
-            }
-        }
-        /**
-         * 後処理
-         */
-        @Override
-        public void onPostExecute( Integer result ) {
-            this.nFileSize = null;
-            // ProgressDialog の削除
-            if( this.progress != null ) {
-                this.progress.dismiss();
-                this.progress = null;
-            }
         }
     }
 }
