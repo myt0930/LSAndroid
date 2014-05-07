@@ -105,29 +105,6 @@ public class AsyncDownloadTask extends AsyncTask<Void, Integer, Integer> {
 //                    }
 //                }
 //
-//                try{
-//                    File file = new File(dstDir.toString() + "master.bin");
-//                    FileInputStream in = new FileInputStream(file);
-//                    LoadData loadData  = new LoadData(in);
-//
-//                    int programVersion = loadData.getInt32();
-//                    int masterCount = loadData.getInt16();
-//                    for(int j = 0;j < masterCount;j++){
-//                        int masterType = loadData.getInt16();
-//                        switch (masterType){
-//                            case 1:
-//                                LiveInfoTrait.getInstance().loadMast(loadData);
-//                                break;
-//                            case 2:
-//                                LiveHouseTrait.getInstance().loadMast(loadData);
-//                                break;
-//                            default:
-//                                break;
-//                        }
-//                    }
-//                }catch(Exception e4){
-//                    e4.printStackTrace();
-//                }
 //            }
         }
 

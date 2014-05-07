@@ -19,6 +19,9 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 
 public class MainActivity extends Activity implements View.OnClickListener {
     private ActionBarDrawerToggle mDrawerToggle;
@@ -121,15 +124,19 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     }
 
-    private String makeTempPath(String fileName){
-        return MainActivity.this.getApplicationInfo().dataDir + File.separator + fileName + ".tmp";
+    private String getTempPath(String fileName){
+        return getResourcePath() + fileName + ".tmp";
+    }
+
+    private String getResourcePath(){
+        return MainActivity.this.getApplicationInfo().dataDir + File.separator;
     }
 
     private void checkUpdateMaster(){
 
         final String srcFile = VERSION_FILE;
         // ローカルに保存するディレクトリ名
-        final String dstFile = makeTempPath(srcFile);
+        final String dstFile = getTempPath(srcFile);
         AsyncDownloadTask task = new AsyncDownloadTask( srcFile, dstFile, new AsyncDownloadTask.AsyncDownloadCallback() {
             @Override
             public void preExecute() {
@@ -140,15 +147,64 @@ public class MainActivity extends Activity implements View.OnClickListener {
             public void callbackExecute(int result){
                 progressDialog.dismiss();
 
-                File versionFile = new File(dstFile);
+                if(result != 0){
+                    //TODO: リトライ処理
 
-                if(result == 0){
+                    return;
+                }
 
+                boolean isUpdate = false;
+                try {
+                    File localFile = new File(getResourcePath().toString() + VERSION_FILE);
+                    if (!localFile.exists()) {
+                        isUpdate = true;
+                    }else{
+                        int currentVersion = Common.getInt32FromFile(localFile);
+                        int serverVersion = Common.getInt32FromFile(new File(getTempPath(VERSION_FILE).toString()));
+                        if(currentVersion < serverVersion){
+                            isUpdate = true;
+                        }
+                    }
+                }catch (Exception e){
+                    //TODO: エラー処理
+                }
+
+                if(isUpdate){
+                    //Updateダイアログ表示
                 }else{
+                    //更新なし
+                    loadMaster();
 
+                    //TODO: Appc表示
                 }
             }
         });
+    }
+
+    private void loadMaster(){
+        try{
+            File file = new File(getResourcePath() + MASTER_FILE);
+            FileInputStream in = new FileInputStream(file);
+            LoadData loadData  = new LoadData(in);
+
+            int programVersion = loadData.getInt32();
+            int masterCount = loadData.getInt16();
+            for(int j = 0;j < masterCount;j++){
+                int masterType = loadData.getInt16();
+                switch (masterType){
+                    case 1:
+                        LiveInfoTrait.getInstance().loadMast(loadData);
+                        break;
+                    case 2:
+                        LiveHouseTrait.getInstance().loadMast(loadData);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }catch(Exception e4){
+            e4.printStackTrace();
+        }
     }
 
     private void showNeedUpdateDialog(){
