@@ -134,6 +134,13 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     private void checkUpdateMaster(){
 
+        File localFile = new File(getResourcePath().toString() + VERSION_FILE);
+        if (!localFile.exists()) {
+            // 強制リトライ
+            showNeedUpdateDialog(true);
+            return;
+        }
+
         final String srcFile = VERSION_FILE;
         // ローカルに保存するディレクトリ名
         final String dstFile = getTempPath(srcFile);
@@ -147,30 +154,25 @@ public class MainActivity extends Activity implements View.OnClickListener {
             public void callbackExecute(int result){
                 progressDialog.dismiss();
 
-                if(result != 0){
-                    //TODO: リトライ処理
-
-                    return;
-                }
-
                 boolean isUpdate = false;
                 try {
                     File localFile = new File(getResourcePath().toString() + VERSION_FILE);
-                    if (!localFile.exists()) {
-                        isUpdate = true;
-                    }else{
+                    //DL成功した時のみ判定
+                    if(result == 0) {
                         int currentVersion = Common.getInt32FromFile(localFile);
                         int serverVersion = Common.getInt32FromFile(new File(getTempPath(VERSION_FILE).toString()));
-                        if(currentVersion < serverVersion){
+                        if (currentVersion < serverVersion) {
                             isUpdate = true;
                         }
                     }
                 }catch (Exception e){
                     //TODO: エラー処理
+                    e.printStackTrace();
                 }
 
                 if(isUpdate){
                     //Updateダイアログ表示
+                    showNeedUpdateDialog(false);
                 }else{
                     //更新なし
                     loadMaster();
@@ -207,7 +209,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         }
     }
 
-    private void showNeedUpdateDialog(){
+    private void showNeedUpdateDialog(final boolean isConstraint){
         // Dialog 表示
         AlertDialog.Builder progress = new AlertDialog.Builder( MainActivity.this );
         progress.setTitle("データ更新");
@@ -216,7 +218,11 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 new DialogInterface.OnClickListener(){
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-
+                        if(isConstraint){
+                            //バージョンファイルDL→マスターDLの流れ
+                            return;
+                        }
+                        //マスターDLのみ
                     }
                 });
         progress.show();
