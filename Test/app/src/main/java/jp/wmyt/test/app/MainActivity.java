@@ -20,8 +20,6 @@ import android.widget.TextView;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 
 public class MainActivity extends Activity implements View.OnClickListener {
     private ActionBarDrawerToggle mDrawerToggle;
@@ -31,7 +29,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     private static final String TAG = "DownloadActivity";
     private static final String URL = "https://s3-ap-northeast-1.amazonaws.com/tokyolive/master.bin";
-    static final String DOWNLOAD_FILE_URL = "https://s3-ap-northeast-1.amazonaws.com/tokyolive/";
+    static final String DOWNLOAD_BASE_URL = "https://s3-ap-northeast-1.amazonaws.com/tokyolive/";
     static final String VERSION_FILE = "version.bin";
     static final String MASTER_FILE = "master.bin";
 
@@ -114,13 +112,13 @@ public class MainActivity extends Activity implements View.OnClickListener {
     protected void onStart() {
         super.onStart();
 
+        showNeedUpdateDialog(true);
+    }
 
+    @Override
+    protected void onRestart() {
+        super.onRestart();
 
-        //version.binを取得
-            //更新なし→loadMast
-            //更新あり→更新ダイアログ表示
-                //master.binをDL
-                    //loadMast
 
     }
 
@@ -141,9 +139,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
             return;
         }
 
-        final String srcFile = VERSION_FILE;
+        final String srcFile = DOWNLOAD_BASE_URL + VERSION_FILE;
         // ローカルに保存するディレクトリ名
-        final String dstFile = getTempPath(srcFile);
+        final String dstFile = getTempPath(VERSION_FILE);
         AsyncDownloadTask task = new AsyncDownloadTask( srcFile, dstFile, new AsyncDownloadTask.AsyncDownloadCallback() {
             @Override
             public void preExecute() {
@@ -181,6 +179,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 }
             }
         });
+        task.execute("");
     }
 
     private void loadMaster(){
@@ -218,14 +217,111 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 new DialogInterface.OnClickListener(){
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        if(isConstraint){
-                            //バージョンファイルDL→マスターDLの流れ
-                            return;
-                        }
-                        //マスターDLのみ
+                        downloadMasterFile(isConstraint);
                     }
                 });
         progress.show();
+    }
+
+    private void showRetryUpdateDialog(final boolean isConstraint){
+        // Dialog 表示
+        AlertDialog.Builder progress = new AlertDialog.Builder( MainActivity.this );
+        progress.setTitle("データ更新");
+        progress.setMessage(isConstraint    ? "ライブ情報の更新に失敗しました。ネットワーク環境の良い場所でリトライして下さい。"
+                                            : "ライブ情報の更新に失敗しました。\\nリトライしますか？\\n(ネットワーク環境の良い場所で行ってください。)");
+        progress.setPositiveButton("リトライ",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        downloadMasterFile(isConstraint);
+                    }
+                }
+        );
+        if(!isConstraint) {
+            progress.setNegativeButton("後で",
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            loadMaster();
+                        }
+                    }
+            );
+        }
+        progress.show();
+    }
+
+    private void showDoneUpdateDialog(){
+        // Dialog 表示
+        final AlertDialog.Builder progress = new AlertDialog.Builder( MainActivity.this );
+        progress.setTitle("データ更新");
+        progress.setMessage("ライブ情報の更新が完了しました。");
+        progress.setPositiveButton("OK",
+                new DialogInterface.OnClickListener(){
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        loadMaster();
+                    }
+                });
+        progress.show();
+    }
+
+    private void downloadMasterFile(final boolean isConstraint){
+        if(isConstraint){
+            final String srcFile = DOWNLOAD_BASE_URL + VERSION_FILE;
+            final String dstFile = getTempPath(VERSION_FILE);
+            AsyncDownloadTask task = new AsyncDownloadTask( srcFile, dstFile, new AsyncDownloadTask.AsyncDownloadCallback() {
+                @Override
+                public void preExecute() { progressDialog.show(); }
+
+                @Override
+                public void callbackExecute(int result) {
+                    progressDialog.dismiss();
+
+                    if(result == 0){
+                        doDownloadMasterFile(true);
+                    }else{
+                        //リトライ
+                        showRetryUpdateDialog(isConstraint);
+                    }
+                }
+            });
+            task.execute("");
+
+            //returnする
+            return;
+        }
+
+        doDownloadMasterFile(false);
+    }
+
+    private void doDownloadMasterFile(final boolean isConstraint){
+        final String srcFile = DOWNLOAD_BASE_URL + MASTER_FILE;
+        // ローカルに保存するディレクトリ名
+        final String dstFile = getResourcePath() + MASTER_FILE;
+        AsyncDownloadTask task = new AsyncDownloadTask( srcFile, dstFile, new AsyncDownloadTask.AsyncDownloadCallback() {
+            @Override
+            public void preExecute() {
+                //インディケータ表示
+                progressDialog.show();
+            }
+
+            @Override
+            public void callbackExecute(int result) {
+                progressDialog.dismiss();
+
+                if(result == 0){
+                    //version.binをリネーム
+                    File tempVersion = new File(getTempPath(VERSION_FILE));
+                    tempVersion.renameTo(new File(getResourcePath() + VERSION_FILE));
+
+                    showDoneUpdateDialog();
+                }else{
+                    //リトライ
+                    showRetryUpdateDialog(isConstraint);
+                }
+            }
+        });
+        task.execute("");
     }
 
     @Override

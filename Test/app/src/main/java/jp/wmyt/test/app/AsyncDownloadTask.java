@@ -14,7 +14,7 @@ import java.net.URL;
 /**
  * Created by miyata on 2014/05/06.
  */
-public class AsyncDownloadTask extends AsyncTask<Void, Integer, Integer> {
+public class AsyncDownloadTask extends AsyncTask<String, Integer, Integer> {
     String srcFile;
     String downloadPath;
 
@@ -49,7 +49,7 @@ public class AsyncDownloadTask extends AsyncTask<Void, Integer, Integer> {
      * バックグラウンド処理
      */
     @Override
-    protected Integer doInBackground(Void... params) {
+    protected Integer doInBackground(String... params) {
         // ダウンロード先のテンポラリ
         File download = new File( downloadPath );
         if( !download.exists() ) {
