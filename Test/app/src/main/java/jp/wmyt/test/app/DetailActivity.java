@@ -10,8 +10,16 @@ import android.view.MenuItem;
 public class DetailActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_detail);
+
         getActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        setContentView(R.layout.activity_detail);
+        //setContentView(R.layout.activity_main);
     }
 
     @Override

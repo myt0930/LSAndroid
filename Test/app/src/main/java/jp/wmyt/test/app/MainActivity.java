@@ -33,10 +33,12 @@ public class MainActivity extends Activity implements View.OnClickListener {
     static final String VERSION_FILE = "version.bin";
     static final String MASTER_FILE = "master.bin";
 
+    static boolean isCheckUpdate = true;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        setTitle("titleカスタマイズ");
 
         ((Button)findViewById(R.id.drawer_button)).setOnClickListener(this);
 
@@ -112,13 +114,15 @@ public class MainActivity extends Activity implements View.OnClickListener {
     protected void onStart() {
         super.onStart();
 
-        showNeedUpdateDialog(true);
+        if(isCheckUpdate) {
+            showNeedUpdateDialog(true);
+        }
+        isCheckUpdate = false;
     }
 
     @Override
     protected void onRestart() {
         super.onRestart();
-
 
     }
 

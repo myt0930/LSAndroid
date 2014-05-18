@@ -17,6 +17,10 @@ import java.util.List;
 public class LiveListFragment extends android.app.ListFragment {
     private onFragmentListClickedListener listener;
 
+    List<CustomCell> mCellList = new ArrayList<CustomCell>();
+    ListView mListView = null;
+    CustomCellAdapter mCustomListAdapter = null;
+
     /**
      * ListFragmentにどのようなアイテムを入れるかを実装
      */
@@ -25,38 +29,36 @@ public class LiveListFragment extends android.app.ListFragment {
         super.onActivityCreated(savedInstanceState);
 
         Activity activity = getActivity();
+        mListView = getListView();
 
-        String[] msgList = { "1", "2", "3", "4", "5", "6", "7", "8", } ;
-        ListView lv = getListView();
-
-        List<CustomCell> objects = new ArrayList<CustomCell>();
-        for(int i = 0; i < msgList.length; i++) {
+        for(int i = 0; i < 4; i++) {
             CustomCell tmpItem = new CustomCell ();
-            //tmpItem.setPlace(msgList[i]);
-            objects.add(tmpItem);
+            mCellList.add(tmpItem);
         }
-        CustomCellAdapter myCustomListAdapter = new CustomCellAdapter (activity, 0, objects);
-        setListAdapter(myCustomListAdapter);
+        mCustomListAdapter = new CustomCellAdapter (activity, 0, mCellList);
+        setListAdapter(mCustomListAdapter);
 
         /**
          * リストの項目をクリックしたときの処理（今回は違うActivityにタッチした場所ごとの値を渡して呼び出します）
          * @params position：タッチした場所（一番上は0）
          */
-        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id){
-                Log.d("",String.valueOf(position));
-
                 Intent detailIntent = new Intent(getActivity(), DetailActivity.class);
                 startActivity(detailIntent);
             }
         });
     }
 
+
+
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         // TODO Auto-generated method stub
         super.onListItemClick(l, v, position, id);
+        Log.d("out::",String.valueOf(position) + "onListItemClick");
+
         //listener.onFragmentListClick(rows[position]);
     }
 

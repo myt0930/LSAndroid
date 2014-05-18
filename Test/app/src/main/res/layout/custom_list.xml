@@ -28,28 +28,30 @@
             android:textSize="12sp"
             android:text="ライブハウス名"
             android:textColor="#ee6557"
-            android:paddingTop="5dp" />
+            android:paddingTop="2dp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="9sp"
-            android:paddingTop="3dp"
+            android:textSize="10sp"
             android:maxLines="2"
             android:text="イベントタイトル / イベントタイトル / イベントタイトル / イベントタイトル / イベントタイトル / イベントタイトル / イベントタイトル / イベントタイトル / イベントタイトル / イベントタイトル / イベントタイトル / イベントタイトル / イベントタイトル / イベントタイトル / イベントタイトル / イベントタイトル / イベントタイトル / イベントタイトル / "
             android:textColor="#16a6b6"
-            android:paddingRight="10dp" />
+            android:paddingRight="10dp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/act"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="10sp"
-            android:paddingTop="3dp"
+            android:textSize="11sp"
             android:maxLines="3"
             android:text="出演者 / 出演者 / 出演者 / 出演者 \n出演者 / 出演者 / 出演者 / 出演者 \n出演者 / 出演者 / 出演者 / 出演者 "
             android:textColor="#181818"
-            android:paddingRight="10dp" />
+            android:paddingRight="10dp"
+            android:textStyle="bold"
+            android:paddingBottom="2dp" />
     </LinearLayout>
 </LinearLayout>
