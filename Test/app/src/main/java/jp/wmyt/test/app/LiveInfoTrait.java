@@ -164,47 +164,44 @@ public class LiveInfoTrait {
         }
     }
 
-    private LiveInfoTrait initWithLiveHouseNo(int liveHouseNo,
+    private void initWithLiveHouseNo(int liveHouseNo,
                                               String liveDate,
                                               int subNo,
                                               String eventTitle,
                                               String act,
                                               String otherInfo){
-        LiveInfoTrait trait = new LiveInfoTrait();
-
-        trait._liveHouseNo  = liveHouseNo;
-        trait._subNo        = subNo;
-        trait._eventTitle   = eventTitle;
-        trait._act          = act;
-        trait._otherInfo    = otherInfo;
+        _liveHouseNo  = liveHouseNo;
+        _subNo        = subNo;
+        _eventTitle   = eventTitle;
+        _act          = act;
+        _otherInfo    = otherInfo;
 
         try{
-            trait._liveDate = new SimpleDateFormat("yyyyMMdd").parse(liveDate);
+            _liveDate = new SimpleDateFormat("yyyyMMdd").parse(liveDate);
         }catch (ParseException e){
             Log.e("parse Error",e.getMessage());
-            return null;
+            return;
         }
 
-        trait._uniqueID = trait._liveDate.toString() + trait._subNo + String.format("%03d", trait._liveHouseNo);
+        _uniqueID = _liveDate.toString() + _subNo + String.format("%03d", _liveHouseNo);
 
         Calendar day = Calendar.getInstance();
-        day.setTime(trait._liveDate);
-        trait._dayOfWeek = dayName[day.DAY_OF_WEEK-1];
+        day.setTime(_liveDate);
+        _dayOfWeek = dayName[day.get(Calendar.DAY_OF_WEEK)-1];
 
         LiveHouseTrait liveHouseTrait = LiveHouseTrait.getInstance().getTraitOfLiveHouseNo(liveHouseNo);
         if(liveHouseTrait != null){
-            trait._sortNo = liveHouseTrait.getSortNo();
+            _sortNo = liveHouseTrait.getSortNo();
         }
 
-        if( minDate == null || minDate.compareTo(trait._liveDate) > 0 ){
-            minDate = trait._liveDate;
+        if( minDate == null || minDate.compareTo(_liveDate) > 0 ){
+            minDate = _liveDate;
         }
-        if( maxDate == null || maxDate.compareTo(trait._liveDate) < 0 ){
-            maxDate = trait._liveDate;
+        if( maxDate == null || maxDate.compareTo(_liveDate) < 0 ){
+            maxDate = _liveDate;
         }
-
-        return trait;
     }
+
 
     //TODO:
     private boolean isFavorite(){

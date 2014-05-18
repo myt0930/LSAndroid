@@ -91,10 +91,10 @@ public class LiveHouseTrait {
 
     private LiveHouseTrait initWithLiveHouseNo(int no, String name, String info, int sortNo){
         LiveHouseTrait trait = new LiveHouseTrait();
-        trait._liveHouseNo = no;
-        trait._name = name;
-        trait._info = info;
-        trait._sortNo = sortNo;
+        _liveHouseNo = no;
+        _name = name;
+        _info = info;
+        _sortNo = sortNo;
         return trait;
     }
 }

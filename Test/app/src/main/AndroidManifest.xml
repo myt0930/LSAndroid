@@ -12,12 +12,17 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name="jp.wmyt.test.app.MainActivity"
-            android:label="Live Scheduler" >
+            android:label="Live Scheduler"
+            android:configChanges="orientation">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name="jp.wmyt.test.app.DetailActivity"
+            android:label="@string/title_detail" >
         </activity>
     </application>
 

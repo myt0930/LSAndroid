@@ -12,14 +12,8 @@ public class DetailActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         getActionBar().setDisplayHomeAsUpEnabled(true);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-
         setContentView(R.layout.activity_detail);
-        //setContentView(R.layout.activity_main);
+
     }
 
     @Override

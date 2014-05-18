@@ -28,13 +28,15 @@ public class LiveListFragment extends android.app.ListFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        Log.d("out", "onActivity");
         Activity activity = getActivity();
         mListView = getListView();
 
-        for(int i = 0; i < 4; i++) {
-            CustomCell tmpItem = new CustomCell ();
-            mCellList.add(tmpItem);
-        }
+//        for(int i = 0; i < 4; i++) {
+//            CustomCell tmpItem = new CustomCell ();
+//            tmpItem.setPlace("aa");
+//            mCellList.add(tmpItem);
+//        }
         mCustomListAdapter = new CustomCellAdapter (activity, 0, mCellList);
         setListAdapter(mCustomListAdapter);
 
@@ -46,12 +48,26 @@ public class LiveListFragment extends android.app.ListFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id){
                 Intent detailIntent = new Intent(getActivity(), DetailActivity.class);
+                CustomCell cell = mCellList.get(position);
+                detailIntent.putExtra("cellId", cell.getUniqueId());
                 startActivity(detailIntent);
             }
         });
     }
 
+    public void setCellList(){
+        mCellList.clear();
 
+        ArrayList<LiveInfoTrait> traitList = LiveInfoTrait.getInstance().getTraitList();
+        for(LiveInfoTrait trait : traitList){
+            CustomCell cell = new CustomCell();
+            cell.setLiveInfoTrait(trait);
+            mCellList.add(cell);
+        }
+
+        mCustomListAdapter.notifyDataSetChanged();
+        mListView.invalidateViews();
+    }
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {

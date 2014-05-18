@@ -1,6 +1,7 @@
 package jp.wmyt.test.app;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -28,20 +30,43 @@ public class CustomCellAdapter extends ArrayAdapter<CustomCell> {
     public View getView(int position, View convertView, ViewGroup parent) {
         //- 特定の行(position)のデータを得る
         CustomCell item = (CustomCell)getItem(position);
+        LiveInfoTrait trait = item.getLiveTrait();
 
         //- リスト用のレイアウトを初回のみ作成
         if( convertView == null ) {
             convertView = layoutInflater.inflate(R.layout.custom_list, null);
         }
 
-//        RelativeLayout layout = (RelativeLayout) convertView.findViewById(R.id.listContainer);
-//
-//        //- メッセージのセット
-        TextView listMessageTextView = (TextView) convertView.findViewById(R.id.title);
-        listMessageTextView .setText("イベントタイトル\nイベントタイトル");
-//
-//        TextView dateText = (TextView) convertView.findViewById(R.id.date);
-//        dateText.setGravity(Gravity.CENTER);
+        //- メッセージのセット
+        TextView placeView = (TextView) convertView.findViewById(R.id.place);
+        placeView .setText(LiveHouseTrait.getInstance().getLiveHouseName(trait.getLiveHouseNo()));
+
+        TextView titleView = (TextView) convertView.findViewById(R.id.title);
+        titleView .setText(trait.getEventTitle());
+
+        TextView actView = (TextView) convertView.findViewById(R.id.act);
+        actView .setText(trait.getAct());
+
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(trait.getLiveDate());
+
+        TextView dateView = (TextView) convertView.findViewById(R.id.date);
+        String date = String.valueOf(cal.get(Calendar.DATE));
+        dateView.setText(date);
+
+        //曜日
+        String dayOfWeek = trait.getDayOfWeek();
+        TextView dayOfWeekView = (TextView) convertView.findViewById(R.id.day_of_week);
+        dayOfWeekView .setText("(" + dayOfWeek + ")");
+
+        Resources res = getContext().getResources();
+        if(dayOfWeek.equals("日")){
+            dayOfWeekView.setTextColor(res.getColor(R.color.red));
+        }else if(dayOfWeek.equals("土")){
+            dayOfWeekView.setTextColor(res.getColor(R.color.blue));
+        }else{
+            dayOfWeekView.setTextColor(res.getColor(R.color.black));
+        }
 
         return convertView;
     }
