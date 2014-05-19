@@ -49,7 +49,7 @@ public class LiveListFragment extends android.app.ListFragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id){
                 Intent detailIntent = new Intent(getActivity(), DetailActivity.class);
                 CustomCell cell = mCellList.get(position);
-                detailIntent.putExtra("cellId", cell.getUniqueId());
+                detailIntent.putExtra("uniqueId", cell.getLiveTrait().getUniqueID());
                 startActivity(detailIntent);
             }
         });
