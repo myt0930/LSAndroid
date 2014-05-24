@@ -2,6 +2,7 @@ package jp.wmyt.test.app;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.app.FragmentManager;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -18,15 +19,19 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.util.Calendar;
 
 public class MainActivity extends Activity implements View.OnClickListener {
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout mDrawer;
     static String LOGTAG = "";
     ProgressDialog progressDialog;
+    private DatePickerDialog mDatePickerDialog;
 
     private static final String TAG = "DownloadActivity";
     private static final String URL = "https://s3-ap-northeast-1.amazonaws.com/tokyolive/master.bin";
@@ -104,6 +109,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         progressDialog = new ProgressDialog(this);
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progressDialog.setTitle("Loading...");
+
     }
 
     @Override
@@ -248,6 +254,27 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 progressDialog.dismiss();
                 LiveListFragment fragment = (LiveListFragment)fragmentManager.findFragmentById(R.id.livelist_fragment);
                 fragment.setCellList();
+
+                final Calendar calendar = Calendar.getInstance();
+                mDatePickerDialog = new DatePickerDialog(
+                        MainActivity.this,
+                        new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                                //日付が確定された時の処理
+                                Toast.makeText(MainActivity.this, String.valueOf(dayOfMonth), Toast.LENGTH_SHORT).show();
+                            }
+                        },
+                        calendar.get(Calendar.YEAR),
+                        calendar.get(Calendar.MONTH),
+                        calendar.get(Calendar.DAY_OF_MONTH)
+                );
+
+                mDatePickerDialog.getDatePicker().setSpinnersShown(false); //ピッカーを消す
+                mDatePickerDialog.getDatePicker().setCalendarViewShown(true); //カレンダーを消す
+                mDatePickerDialog.getDatePicker().getCalendarView().setShowWeekNumber(false);
+                mDatePickerDialog.show();
+
             }
         }.execute();
     }

@@ -26,12 +26,16 @@ public class ErrorDialogFragment extends DialogFragment {
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Intent intent = new Intent();
-                intent.setAction(Intent.ACTION_SENDTO);
-                intent.setData(Uri.parse("mailto:" + "myt0930@gmail.com"));
-                intent.putExtra(Intent.EXTRA_SUBJECT, "不具合の報告");
-                intent.putExtra(Intent.EXTRA_TEXT, mExStackTrace);
-                startActivity(intent);
+                try {
+                    Intent intent = new Intent();
+                    intent.setAction(Intent.ACTION_SENDTO);
+                    intent.setData(Uri.parse("mailto:" + "myt0930@gmail.com"));
+                    intent.putExtra(Intent.EXTRA_SUBJECT, "不具合の報告");
+                    intent.putExtra(Intent.EXTRA_TEXT, mExStackTrace);
+                    startActivity(intent);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
             }
         });
         builder.setNegativeButton("キャンセル", null);
