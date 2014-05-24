@@ -2,12 +2,17 @@ package jp.wmyt.test.app;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.FragmentManager;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -28,6 +33,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
     static final String DOWNLOAD_BASE_URL = "https://s3-ap-northeast-1.amazonaws.com/tokyolive/";
     static final String VERSION_FILE = "version.bin";
     static final String MASTER_FILE = "master.bin";
+    public static final String EX_STACK_TRACE = "exStackTrace";
+    public static final String PREF_NAME_SAMPLE = "prefLiveScheduler";
 
     static boolean isCheckUpdate = true;
 
@@ -70,6 +77,24 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         mDrawer.setDrawerListener(mDrawerToggle);
 
+        // UncaughtExceptionHandlerを実装したクラスをセットする。
+        CustomUncaughtExceptionHandler customUncaughtExceptionHandler = new CustomUncaughtExceptionHandler(
+                getApplicationContext());
+        Thread.setDefaultUncaughtExceptionHandler(customUncaughtExceptionHandler);
+        // SharedPreferencesに保存してある例外発生時のスタックトレースを取得します。
+        SharedPreferences preferences = getApplicationContext()
+                .getSharedPreferences(PREF_NAME_SAMPLE, Context.MODE_PRIVATE);
+        String exStackTrace = preferences.getString(EX_STACK_TRACE, null);
+
+        if (!TextUtils.isEmpty(exStackTrace)) {
+            // スタックトレースが存在する場合は、
+            // エラー情報を送信するかしないかのダイアログを表示します。
+            new ErrorDialogFragment(exStackTrace).show(
+                    getFragmentManager(), "error_dialog");
+            // スタックトレースを消去します。
+            preferences.edit().remove(EX_STACK_TRACE).commit();
+        }
+
         // UpNavigationアイコン(アイコン横の<の部分)を有効に
         // NavigationDrawerではR.drawable.drawerで上書き
         getActionBar().setDisplayHomeAsUpEnabled(true);
@@ -77,6 +102,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         getActionBar().setHomeButtonEnabled(true);
 
         progressDialog = new ProgressDialog(this);
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progressDialog.setTitle("Loading...");
     }
 
@@ -152,7 +178,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
             }
             @Override
             public void callbackExecute(int result){
-                progressDialog.dismiss();
 
                 boolean isUpdate = false;
                 try {
@@ -185,36 +210,51 @@ public class MainActivity extends Activity implements View.OnClickListener {
     }
 
     private void loadMaster(){
-        try{
-            File file = new File(getResourcePath() + MASTER_FILE);
-            FileInputStream in = new FileInputStream(file);
-            LoadData loadData  = new LoadData(in);
+        final FragmentManager fragmentManager = this.getFragmentManager();
 
-            int programVersion = loadData.getInt32();
-            int masterCount = loadData.getInt16();
-            for(int j = 0;j < masterCount;j++){
-                int masterType = loadData.getInt16();
-                switch (masterType){
-                    case 1:
-                        LiveInfoTrait.getInstance().loadMast(loadData);
-                        break;
-                    case 2:
-                        LiveHouseTrait.getInstance().loadMast(loadData);
-                        break;
-                    default:
-                        break;
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+                try{
+                    File file = new File(getResourcePath() + MASTER_FILE);
+                    FileInputStream in = new FileInputStream(file);
+                    LoadData loadData  = new LoadData(in);
+
+                    int programVersion = loadData.getInt32();
+                    int masterCount = loadData.getInt16();
+                    for(int j = 0;j < masterCount;j++){
+                        int masterType = loadData.getInt16();
+                        switch (masterType){
+                            case 1:
+                                LiveInfoTrait.getInstance().loadMast(loadData);
+                                break;
+                            case 2:
+                                LiveHouseTrait.getInstance().loadMast(loadData);
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                }catch(Exception e4){
+                    e4.printStackTrace();
                 }
+                return null;
             }
-        }catch(Exception e4){
-            e4.printStackTrace();
-        }
 
-        LiveListFragment fragment = (LiveListFragment)this.getFragmentManager().findFragmentById(R.id.livelist_fragment);
-        fragment.setCellList();
+            String result2;
+
+            @Override
+            protected void onPostExecute(Void result) {
+                progressDialog.dismiss();
+                LiveListFragment fragment = (LiveListFragment)fragmentManager.findFragmentById(R.id.livelist_fragment);
+                fragment.setCellList();
+            }
+        }.execute();
     }
 
     private void showNeedUpdateDialog(final boolean isConstraint){
         // Dialog 表示
+        progressDialog.dismiss();
         AlertDialog.Builder progress = new AlertDialog.Builder( MainActivity.this );
         progress.setTitle("データ更新");
         progress.setMessage("ライブ情報の更新を行います。");
@@ -230,6 +270,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     private void showRetryUpdateDialog(final boolean isConstraint){
         // Dialog 表示
+        progressDialog.dismiss();
         AlertDialog.Builder progress = new AlertDialog.Builder( MainActivity.this );
         progress.setTitle("データ更新");
         progress.setMessage(isConstraint    ? "ライブ情報の更新に失敗しました。ネットワーク環境の良い場所でリトライして下さい。"
@@ -312,8 +353,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
             @Override
             public void callbackExecute(int result) {
-                progressDialog.dismiss();
-
                 if(result == 0){
                     //version.binをリネーム
                     File tempVersion = new File(getTempPath(VERSION_FILE));
