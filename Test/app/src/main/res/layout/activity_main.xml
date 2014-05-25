@@ -7,38 +7,21 @@
     <!-- The main content view -->
 
     <fragment
-        android:name="jp.wmyt.test.app.LiveListFragment"
+        android:name="jp.wmyt.test.app.Fragment.LiveListFragment"
         android:id="@+id/livelist_fragment"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"/>
 
     <!-- The navigation drawer -->
 
-    <LinearLayout
+    <ListView
         android:id="@+id/left_drawer"
         android:layout_width="240dp"
         android:layout_height="match_parent"
-        android:layout_gravity="left"
-        android:background="#333"
-        android:orientation="vertical">
-
-        <Button
-            android:id="@+id/drawer_button"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:text="今日のライブ" />
-
-        <Button
-            android:id="@+id/drawer_button_a"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:text="ライブハウス一覧" />
-
-        <Button
-            android:id="@+id/drawer_button_b"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:text="お気に入り" />
-    </LinearLayout>
+        android:layout_gravity="start"
+        android:choiceMode="singleChoice"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="0dp"
+        android:background="@color/white"/>
 
 </android.support.v4.widget.DrawerLayout>

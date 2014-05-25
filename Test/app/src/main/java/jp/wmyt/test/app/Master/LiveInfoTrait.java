@@ -1,4 +1,4 @@
-package jp.wmyt.test.app;
+package jp.wmyt.test.app.Master;
 
 import android.util.Log;
 
@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
+
 /**
  * Created by miyata on 2014/05/06.
  */

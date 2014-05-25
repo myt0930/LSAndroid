@@ -1,4 +1,4 @@
-package jp.wmyt.test.app;
+package jp.wmyt.test.app.Fragment;
 
 import android.app.AlertDialog;
 import android.app.Dialog;

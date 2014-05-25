@@ -1,4 +1,4 @@
-package jp.wmyt.test.app;
+package jp.wmyt.test.app.Fragment;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -10,6 +10,11 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import jp.wmyt.test.app.Cell.CustomCell;
+import jp.wmyt.test.app.Cell.CustomCellAdapter;
+import jp.wmyt.test.app.DetailActivity;
+import jp.wmyt.test.app.Master.LiveInfoTrait;
 
 /**
  * Created by miyata on 2014/05/04.

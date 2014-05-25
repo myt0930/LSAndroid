@@ -18,17 +18,25 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
+import android.widget.AdapterView;
 import android.widget.DatePicker;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
+
+import jp.wmyt.test.app.Fragment.ErrorDialogFragment;
+import jp.wmyt.test.app.Fragment.LiveListFragment;
+import jp.wmyt.test.app.Master.LiveHouseTrait;
+import jp.wmyt.test.app.Master.LiveInfoTrait;
+import jp.wmyt.test.app.Master.LoadData;
 
 public class MainActivity extends Activity implements View.OnClickListener {
-    private ActionBarDrawerToggle mDrawerToggle;
-    private DrawerLayout mDrawer;
+
     static String LOGTAG = "";
     ProgressDialog progressDialog;
     private DatePickerDialog mDatePickerDialog;
@@ -43,73 +51,66 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     static boolean isCheckUpdate = true;
 
+    // サイドから出てくるメニュー
+    private ActionBarDrawerToggle mDrawerToggle;
+    private DrawerLayout mDrawerLayout;
+    private ListView mDrawerList;
+    CustomDrawerAdapter mDrawerAdapter;
+    List<DrawerItem> mDrawerDataList;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setTitle("新宿Motion");
 
-        ((Button)findViewById(R.id.drawer_button)).setOnClickListener(this);
+        // サイドから出てくるメニュー
+        {
+            mDrawerDataList = new ArrayList<DrawerItem>();
+            mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+            mDrawerList = (ListView) findViewById(R.id.left_drawer);
+            mDrawerDataList.add(new DrawerItem("ホーム", R.drawable.ic_action_view_as_list));
+            mDrawerDataList.add(new DrawerItem("ライブハウス一覧", R.drawable.ic_action_view_as_list));
+            mDrawerDataList.add(new DrawerItem("お気に入り", R.drawable.ic_action_view_as_list));
+            mDrawerAdapter = new CustomDrawerAdapter(this, R.layout.custom_drawer_item, mDrawerDataList);
+            mDrawerList.setAdapter(mDrawerAdapter);
 
-        mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawer,
-                R.drawable.ic_drawer, R.string.drawer_open, R.string.drawer_close) {
-            @Override
-            public void onDrawerClosed(View drawerView) {
-                Log.i(LOGTAG, "onDrawerClosed");
-            }
+            mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
+                    R.drawable.ic_drawer, R.string.drawer_open, R.string.drawer_close) {
+                @Override
+                public void onDrawerClosed(View drawerView) {Log.i(LOGTAG, "onDrawerClosed");}
+                @Override
+                public void onDrawerOpened(View drawerView) {Log.i(LOGTAG, "onDrawerOpened");}
+            };
+            mDrawerLayout.setDrawerListener(mDrawerToggle);
 
-            @Override
-            public void onDrawerOpened(View drawerView) {
-                Log.i(LOGTAG, "onDrawerOpened");
-            }
-
-            @Override
-            public void onDrawerSlide(View drawerView, float slideOffset) {
-                // ActionBarDrawerToggleクラス内の同メソッドにてアイコンのアニメーションの処理をしている。
-                // overrideするときは気を付けること。
-                super.onDrawerSlide(drawerView, slideOffset);
-                Log.i(LOGTAG, "onDrawerSlide : " + slideOffset);
-            }
-
-            @Override
-            public void onDrawerStateChanged(int newState) {
-                // 表示済み、閉じ済みの状態：0
-                // ドラッグ中状態:1
-                // ドラッグを放した後のアニメーション中：2
-                Log.i(LOGTAG, "onDrawerStateChanged  new state : " + newState);
-            }
-        };
-
-        mDrawer.setDrawerListener(mDrawerToggle);
-
-        // UncaughtExceptionHandlerを実装したクラスをセットする。
-        CustomUncaughtExceptionHandler customUncaughtExceptionHandler = new CustomUncaughtExceptionHandler(
-                getApplicationContext());
-        Thread.setDefaultUncaughtExceptionHandler(customUncaughtExceptionHandler);
-        // SharedPreferencesに保存してある例外発生時のスタックトレースを取得します。
-        SharedPreferences preferences = getApplicationContext()
-                .getSharedPreferences(PREF_NAME_SAMPLE, Context.MODE_PRIVATE);
-        String exStackTrace = preferences.getString(EX_STACK_TRACE, null);
-
-        if (!TextUtils.isEmpty(exStackTrace)) {
-            // スタックトレースが存在する場合は、
-            // エラー情報を送信するかしないかのダイアログを表示します。
-            new ErrorDialogFragment(exStackTrace).show(
-                    getFragmentManager(), "error_dialog");
-            // スタックトレースを消去します。
-            preferences.edit().remove(EX_STACK_TRACE).commit();
+            mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
         }
 
-        // UpNavigationアイコン(アイコン横の<の部分)を有効に
-        // NavigationDrawerではR.drawable.drawerで上書き
-        getActionBar().setDisplayHomeAsUpEnabled(true);
-        // UpNavigationを有効に
-        getActionBar().setHomeButtonEnabled(true);
+        // UpNavigationアイコン(アイコン横の<の部分)を有効にする
+        {
+            getActionBar().setDisplayHomeAsUpEnabled(true);
+            getActionBar().setHomeButtonEnabled(true);
+        }
 
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progressDialog.setTitle("Loading...");
+        // 非同期処理を行う際のインディケータ
+        {
+            progressDialog = new ProgressDialog(this);
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            progressDialog.setTitle("Loading...");
+        }
 
+        // UncaughtExceptionHandlerを実装したクラスをセットする。
+        {
+            CustomUncaughtExceptionHandler customUncaughtExceptionHandler = new CustomUncaughtExceptionHandler(getApplicationContext());
+            Thread.setDefaultUncaughtExceptionHandler(customUncaughtExceptionHandler);
+
+            SharedPreferences preferences = getApplicationContext().getSharedPreferences(PREF_NAME_SAMPLE, Context.MODE_PRIVATE);
+            String exStackTrace = preferences.getString(EX_STACK_TRACE, null);
+            if (!TextUtils.isEmpty(exStackTrace)) {
+                new ErrorDialogFragment(exStackTrace).show(getFragmentManager(), "error_dialog");
+                preferences.edit().remove(EX_STACK_TRACE).commit();
+            }
+        }
     }
 
     @Override
@@ -126,7 +127,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        mDrawer.closeDrawers();
+        mDrawerLayout.closeDrawers();
     }
 
 
@@ -406,5 +407,29 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     private boolean isTabletMode(){
         return getResources().getBoolean(R.bool.is_tablet);
+    }
+
+    private class DrawerItemClickListener implements ListView.OnItemClickListener {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            selectItem(position);
+        }
+    }
+
+    /** Swaps fragments in the main content view */
+    private void selectItem(int position) {
+        // Create a new fragment and specify the planet to show based on position
+//        LiveListFragment fragment = new LiveListFragment();
+//
+//        // Insert the fragment by replacing any existing fragment
+//        FragmentManager fragmentManager = getFragmentManager();
+//        fragmentManager.beginTransaction()
+//                .replace(R.id.livelist_fragment, fragment)
+//                .commit();
+//        fragment.setCellList();
+
+        // Highlight the selected item, update the title, and close the drawer
+        mDrawerList.setItemChecked(position, true);
+        mDrawerLayout.closeDrawer(mDrawerList);
     }
 }

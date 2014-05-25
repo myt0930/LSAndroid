@@ -1,4 +1,4 @@
-package jp.wmyt.test.app;
+package jp.wmyt.test.app.Master;
 
 import android.util.Log;
 

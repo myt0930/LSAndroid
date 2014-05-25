@@ -8,6 +8,9 @@ import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
 
+import jp.wmyt.test.app.Master.LiveHouseTrait;
+import jp.wmyt.test.app.Master.LiveInfoTrait;
+
 /**
  * Created by miyata on 2014/05/05.
  */

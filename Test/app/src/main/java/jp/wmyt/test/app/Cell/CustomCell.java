@@ -1,4 +1,7 @@
-package jp.wmyt.test.app;
+package jp.wmyt.test.app.Cell;
+
+import jp.wmyt.test.app.Master.LiveHouseTrait;
+import jp.wmyt.test.app.Master.LiveInfoTrait;
 
 /**
  * Created by miyata on 2014/04/28.
@@ -36,7 +39,7 @@ public class CustomCell {
         int liveHouseNo = trait.getLiveHouseNo();
         this.place      = LiveHouseTrait.getInstance().getLiveHouseName(liveHouseNo);
         this.title      = trait.getEventTitle();
-        this.act        = trait.getAct();
+        this.act        = trait.getAct().replace("\n", "/");
         this.uniqueId   = trait.getUniqueID();
     }
 }

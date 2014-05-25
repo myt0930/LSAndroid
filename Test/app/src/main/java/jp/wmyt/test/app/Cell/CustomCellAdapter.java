@@ -1,4 +1,4 @@
-package jp.wmyt.test.app;
+package jp.wmyt.test.app.Cell;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -11,6 +11,10 @@ import android.widget.TextView;
 
 import java.util.Calendar;
 import java.util.List;
+
+import jp.wmyt.test.app.Master.LiveHouseTrait;
+import jp.wmyt.test.app.Master.LiveInfoTrait;
+import jp.wmyt.test.app.R;
 
 /**
  * Created by miyata on 2014/04/28.
@@ -45,7 +49,7 @@ public class CustomCellAdapter extends ArrayAdapter<CustomCell> {
         titleView .setText(trait.getEventTitle());
 
         TextView actView = (TextView) convertView.findViewById(R.id.act);
-        actView .setText(trait.getAct());
+        actView .setText(trait.getAct().replace("\n", "/"));
 
         Calendar cal = Calendar.getInstance();
         cal.setTime(trait.getLiveDate());
