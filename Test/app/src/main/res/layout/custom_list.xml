@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:baselineAligned="true"
-    android:background="#f5f5f5" >
+    android:background="@color/white" >
 
     <RelativeLayout
         android:layout_width="30dp"

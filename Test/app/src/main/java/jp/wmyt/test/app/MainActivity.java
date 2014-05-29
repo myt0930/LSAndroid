@@ -30,6 +30,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import jp.wmyt.test.app.Fragment.ErrorDialogFragment;
+import jp.wmyt.test.app.Fragment.LiveHouseListFragment;
 import jp.wmyt.test.app.Fragment.LiveListFragment;
 import jp.wmyt.test.app.Master.LiveHouseTrait;
 import jp.wmyt.test.app.Master.LiveInfoTrait;
@@ -419,14 +420,15 @@ public class MainActivity extends Activity implements View.OnClickListener {
     /** Swaps fragments in the main content view */
     private void selectItem(int position) {
         // Create a new fragment and specify the planet to show based on position
-//        LiveListFragment fragment = new LiveListFragment();
-//
-//        // Insert the fragment by replacing any existing fragment
-//        FragmentManager fragmentManager = getFragmentManager();
+        LiveHouseListFragment fragment = (LiveHouseListFragment)getFragmentManager().findFragmentById(R.id.livehouselist_fragment);
+
+        // Insert the fragment by replacing any existing fragment
+        FragmentManager fragmentManager = getFragmentManager();
 //        fragmentManager.beginTransaction()
 //                .replace(R.id.livelist_fragment, fragment)
+//                .addToBackStack(null)
 //                .commit();
-//        fragment.setCellList();
+        fragment.setCellList();
 
         // Highlight the selected item, update the title, and close the drawer
         mDrawerList.setItemChecked(position, true);

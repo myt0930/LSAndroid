@@ -1,9 +1,12 @@
 package jp.wmyt.test.app.Cell;
 
+import jp.wmyt.test.app.Master.LiveHouseTrait;
+
 /**
  * Created by miyata on 2014/05/25.
  */
 public class LiveHouseCell {
+    private LiveHouseTrait trait;
     private String place;
 
     public void setPlace(String msg) {
@@ -12,4 +15,7 @@ public class LiveHouseCell {
     public String getPlace() {
         return place;
     }
+
+    public void setTrait(LiveHouseTrait _trait){ trait = _trait; }
+    public LiveHouseTrait getTrait(){ return trait; }
 }

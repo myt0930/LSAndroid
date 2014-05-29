@@ -12,6 +12,12 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"/>
 
+    <fragment
+        android:name="jp.wmyt.test.app.Fragment.LiveHouseListFragment"
+        android:id="@+id/livehouselist_fragment"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"/>
+
     <!-- The navigation drawer -->
 
     <ListView
