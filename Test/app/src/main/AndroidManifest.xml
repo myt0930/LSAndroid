@@ -24,6 +24,9 @@
             android:name="jp.wmyt.test.app.DetailActivity"
             android:label="@string/title_detail" >
         </activity>
+        <activity
+            android:name="jp.wmyt.test.app.SubActivity">
+        </activity>
     </application>
 
 </manifest>

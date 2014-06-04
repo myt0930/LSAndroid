@@ -184,7 +184,8 @@ public class LiveInfoTrait {
             return;
         }
 
-        _uniqueID = _liveDate.toString() + _subNo + String.format("%03d", _liveHouseNo);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+        _uniqueID = sdf.format(_liveDate) + _subNo + String.format("%03d", _liveHouseNo);
 
         Calendar day = Calendar.getInstance();
         day.setTime(_liveDate);

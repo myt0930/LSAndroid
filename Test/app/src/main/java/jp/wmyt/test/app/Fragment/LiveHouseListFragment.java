@@ -11,13 +11,10 @@ import android.widget.ListView;
 import java.util.ArrayList;
 import java.util.List;
 
-import jp.wmyt.test.app.Cell.CustomCell;
-import jp.wmyt.test.app.Cell.CustomCellAdapter;
 import jp.wmyt.test.app.Cell.LiveHouseCell;
 import jp.wmyt.test.app.Cell.LiveHouseCellAdapter;
-import jp.wmyt.test.app.DetailActivity;
 import jp.wmyt.test.app.Master.LiveHouseTrait;
-import jp.wmyt.test.app.Master.LiveInfoTrait;
+import jp.wmyt.test.app.SubActivity;
 
 /**
  * Created by miyata on 2014/05/25.
@@ -54,13 +51,15 @@ public class LiveHouseListFragment extends android.app.ListFragment{
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id){
-                Intent detailIntent = new Intent(getActivity(), DetailActivity.class);
+                Intent subIntent = new Intent(getActivity(), SubActivity.class);
                 LiveHouseCell cell = mCellList.get(position);
                 //TODO:
-//                detailIntent.putExtra("uniqueId", cell.getLiveTrait().getUniqueID());
-//                startActivity(detailIntent);
+                subIntent.putExtra("liveHouseNo", cell.getTrait().getLiveHouseNo());
+                startActivity(subIntent);
             }
         });
+
+        setCellList();
     }
 
     public void setCellList(){

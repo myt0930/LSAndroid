@@ -1,22 +1,51 @@
 package jp.wmyt.test.app;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
+import java.util.Date;
 
 /**
  * Created by JP10733 on 2014/05/07.
  */
 public class Common {
-    static public int getInt32FromFile(File file) throws IOException {
-        FileInputStream in = new FileInputStream(file);
-        byte[] byteData = new byte[4];
-        in.read(byteData, 0, 4);
-        ByteBuffer buffer = ByteBuffer.wrap(byteData);
-        buffer.order(ByteOrder.BIG_ENDIAN);
 
-        return buffer.getInt();
+    //シングルトン
+    private static final Common instance = new Common();
+    public Common(){
+        this.liveListType = LIST_TYPE_TODAY;
+    }
+    public static Common getInstance(){
+        return instance;
+    }
+
+    static public int LIST_TYPE_TODAY   = 0;
+    static public int LIST_TYPE_DATE    = 1;
+    static public int LIST_TYPE_FAV     = 2;
+    static public int LIST_TYPE_LIVEHOUSE = 3;
+
+    private int liveListType;
+    private Date liveDate;
+    private String searchString;
+
+    public int getLiveListType() {
+        return liveListType;
+    }
+
+    public void setLiveListType(int liveListType) {
+        this.liveListType = liveListType;
+    }
+
+    public Date getLiveDate() {
+        return liveDate;
+    }
+
+    public void setLiveDate(Date liveDate) {
+        this.liveDate = liveDate;
+    }
+
+    public String getSearchString() {
+        return searchString;
+    }
+
+    public void setSearchString(String searchString) {
+        this.searchString = searchString;
     }
 }

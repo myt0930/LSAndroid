@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -25,6 +26,9 @@ import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -192,8 +196,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
                     File localFile = new File(getResourcePath().toString() + VERSION_FILE);
                     //DL成功した時のみ判定
                     if(result == 0) {
-                        int currentVersion = Common.getInt32FromFile(localFile);
-                        int serverVersion = Common.getInt32FromFile(new File(getTempPath(VERSION_FILE).toString()));
+                        int currentVersion = getInt32FromFile(localFile);
+                        int serverVersion = getInt32FromFile(new File(getTempPath(VERSION_FILE).toString()));
                         if (currentVersion < serverVersion) {
                             isUpdate = true;
                         }
@@ -254,8 +258,12 @@ public class MainActivity extends Activity implements View.OnClickListener {
             @Override
             protected void onPostExecute(Void result) {
                 progressDialog.dismiss();
-                LiveListFragment fragment = (LiveListFragment)fragmentManager.findFragmentById(R.id.livelist_fragment);
-                fragment.setCellList();
+                final LiveListFragment listFragment = new LiveListFragment();// (LiveListFragment)fragmentManager.findFragmentById(R.id.livelist_fragment);
+
+                FragmentManager manager = getFragmentManager();
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                transaction.replace(R.id.content_frame, listFragment, "live_list");
+                transaction.commit();
 
                 final Calendar calendar = Calendar.getInstance();
                 mDatePickerDialog = new DatePickerDialog(
@@ -420,18 +428,40 @@ public class MainActivity extends Activity implements View.OnClickListener {
     /** Swaps fragments in the main content view */
     private void selectItem(int position) {
         // Create a new fragment and specify the planet to show based on position
-        LiveHouseListFragment fragment = (LiveHouseListFragment)getFragmentManager().findFragmentById(R.id.livehouselist_fragment);
+        LiveHouseListFragment fragment = new LiveHouseListFragment();//(LiveHouseListFragment)getFragmentManager().findFragmentById(R.id.livehouselist_fragment);
 
         // Insert the fragment by replacing any existing fragment
         FragmentManager fragmentManager = getFragmentManager();
-//        fragmentManager.beginTransaction()
-//                .replace(R.id.livelist_fragment, fragment)
-//                .addToBackStack(null)
-//                .commit();
-        fragment.setCellList();
+
+        if( position == 0 ) {
+            if (fragmentManager.findFragmentByTag("live_house") != null) {
+                Log.d("main", "remove");
+                onBackPressed();
+            }
+        }
+        else if( position == 1 ) {
+            if (fragmentManager.findFragmentByTag("live_house") == null) {
+                Log.d("main", "replace");
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                transaction.replace(R.id.content_frame, fragment, "live_house");
+                transaction.addToBackStack(null);
+                transaction.commit();
+            }
+        }
+//        fragment.setCellList();
 
         // Highlight the selected item, update the title, and close the drawer
         mDrawerList.setItemChecked(position, true);
         mDrawerLayout.closeDrawer(mDrawerList);
+    }
+
+    private int getInt32FromFile(File file) throws IOException {
+        FileInputStream in = new FileInputStream(file);
+        byte[] byteData = new byte[4];
+        in.read(byteData, 0, 4);
+        ByteBuffer buffer = ByteBuffer.wrap(byteData);
+        buffer.order(ByteOrder.BIG_ENDIAN);
+
+        return buffer.getInt();
     }
 }

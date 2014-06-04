@@ -6,17 +6,10 @@
 
     <!-- The main content view -->
 
-    <fragment
-        android:name="jp.wmyt.test.app.Fragment.LiveListFragment"
-        android:id="@+id/livelist_fragment"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"/>
-
-    <fragment
-        android:name="jp.wmyt.test.app.Fragment.LiveHouseListFragment"
-        android:id="@+id/livehouselist_fragment"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"/>
+    <FrameLayout
+        android:id="@+id/content_frame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
     <!-- The navigation drawer -->
 
