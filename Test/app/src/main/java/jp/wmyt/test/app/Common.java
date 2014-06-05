@@ -1,5 +1,6 @@
 package jp.wmyt.test.app;
 
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -11,6 +12,7 @@ public class Common {
     private static final Common instance = new Common();
     public Common(){
         this.liveListType = LIST_TYPE_TODAY;
+        this.liveDate = Calendar.getInstance().getTime();
     }
     public static Common getInstance(){
         return instance;

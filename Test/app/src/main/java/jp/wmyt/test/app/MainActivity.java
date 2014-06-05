@@ -30,8 +30,10 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import jp.wmyt.test.app.Fragment.ErrorDialogFragment;
@@ -403,12 +405,16 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 break;
             case R.id.action_calendar:
                 final Calendar calendar = Calendar.getInstance();
+                calendar.setTime(Common.getInstance().getLiveDate());
                 mDatePickerDialog = new DatePickerDialog(
                         MainActivity.this,
                         new DatePickerDialog.OnDateSetListener() {
                             @Override
                             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                                 //日付が確定された時の処理
+                                Calendar newCalendar = Calendar.getInstance();
+                                newCalendar.set(year, monthOfYear, dayOfMonth);
+                                Common.getInstance().setLiveDate(newCalendar.getTime());
                                 Toast.makeText(MainActivity.this, String.valueOf(dayOfMonth), Toast.LENGTH_SHORT).show();
                             }
                         },
