@@ -34,6 +34,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import jp.wmyt.test.app.Fragment.ErrorDialogFragment;
+import jp.wmyt.test.app.Fragment.FavListFragment;
 import jp.wmyt.test.app.Fragment.LiveHouseListFragment;
 import jp.wmyt.test.app.Fragment.LiveListFragment;
 import jp.wmyt.test.app.Master.LiveHouseTrait;
@@ -53,6 +54,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
     static final String MASTER_FILE = "master.bin";
     public static final String EX_STACK_TRACE = "exStackTrace";
     public static final String PREF_NAME_SAMPLE = "prefLiveScheduler";
+    static final String TAG_BACKSTACK_LIVEHOUSE = "liveHouse";
+    static final String TAG_BACKSTACK_FAV = "fav";
 
     static boolean isCheckUpdate = true;
 
@@ -428,24 +431,40 @@ public class MainActivity extends Activity implements View.OnClickListener {
     /** Swaps fragments in the main content view */
     private void selectItem(int position) {
         // Create a new fragment and specify the planet to show based on position
-        LiveHouseListFragment fragment = new LiveHouseListFragment();//(LiveHouseListFragment)getFragmentManager().findFragmentById(R.id.livehouselist_fragment);
 
         // Insert the fragment by replacing any existing fragment
         FragmentManager fragmentManager = getFragmentManager();
 
+        int backStackCount = fragmentManager.getBackStackEntryCount();
+
         if( position == 0 ) {
-            if (fragmentManager.findFragmentByTag("live_house") != null) {
-                Log.d("main", "remove");
+            for(int i = 0;i < backStackCount;i++)
+            {
                 onBackPressed();
             }
         }
         else if( position == 1 ) {
-            if (fragmentManager.findFragmentByTag("live_house") == null) {
+            if (fragmentManager.findFragmentByTag(TAG_BACKSTACK_LIVEHOUSE) == null) {
                 Log.d("main", "replace");
+                LiveHouseListFragment fragment = new LiveHouseListFragment();
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
-                transaction.replace(R.id.content_frame, fragment, "live_house");
-                transaction.addToBackStack(null);
+                transaction.replace(R.id.content_frame, fragment, TAG_BACKSTACK_LIVEHOUSE);
+                transaction.addToBackStack(TAG_BACKSTACK_LIVEHOUSE);
                 transaction.commit();
+            }else{
+                fragmentManager.popBackStack(TAG_BACKSTACK_LIVEHOUSE, 0);
+            }
+        }
+        else if( position == 2 ) {
+            if (fragmentManager.findFragmentByTag(TAG_BACKSTACK_FAV) == null) {
+                Log.d("main", "replace");
+                FavListFragment fragment = new FavListFragment();
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                transaction.replace(R.id.content_frame, fragment, TAG_BACKSTACK_FAV);
+                transaction.addToBackStack(TAG_BACKSTACK_FAV);
+                transaction.commit();
+            }else{
+                fragmentManager.popBackStack(TAG_BACKSTACK_FAV, 0);
             }
         }
 //        fragment.setCellList();
