@@ -30,10 +30,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import jp.wmyt.test.app.Fragment.ErrorDialogFragment;
@@ -453,14 +451,18 @@ public class MainActivity extends Activity implements View.OnClickListener {
         int backStackCount = fragmentManager.getBackStackEntryCount();
 
         if( position == 0 ) {
+            /*
+             *  ホーム
+             */
             for(int i = 0;i < backStackCount;i++)
             {
                 onBackPressed();
             }
-        }
-        else if( position == 1 ) {
+        }else if( position == 1 ) {
+            /*
+             *  ライブハウスリスト
+             */
             if (fragmentManager.findFragmentByTag(TAG_BACKSTACK_LIVEHOUSE) == null) {
-                Log.d("main", "replace");
                 LiveHouseListFragment fragment = new LiveHouseListFragment();
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
                 transaction.replace(R.id.content_frame, fragment, TAG_BACKSTACK_LIVEHOUSE);
@@ -469,10 +471,11 @@ public class MainActivity extends Activity implements View.OnClickListener {
             }else{
                 fragmentManager.popBackStack(TAG_BACKSTACK_LIVEHOUSE, 0);
             }
-        }
-        else if( position == 2 ) {
+        }else if( position == 2 ) {
+            /*
+             *  お気に入り
+             */
             if (fragmentManager.findFragmentByTag(TAG_BACKSTACK_FAV) == null) {
-                Log.d("main", "replace");
                 FavListFragment fragment = new FavListFragment();
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
                 transaction.replace(R.id.content_frame, fragment, TAG_BACKSTACK_FAV);
