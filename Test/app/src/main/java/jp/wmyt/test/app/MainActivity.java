@@ -8,6 +8,7 @@ import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
@@ -267,27 +268,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
                 transaction.replace(R.id.content_frame, listFragment, "live_list");
                 transaction.commit();
-
-                final Calendar calendar = Calendar.getInstance();
-                mDatePickerDialog = new DatePickerDialog(
-                        MainActivity.this,
-                        new DatePickerDialog.OnDateSetListener() {
-                            @Override
-                            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                                //日付が確定された時の処理
-                                Toast.makeText(MainActivity.this, String.valueOf(dayOfMonth), Toast.LENGTH_SHORT).show();
-                            }
-                        },
-                        calendar.get(Calendar.YEAR),
-                        calendar.get(Calendar.MONTH),
-                        calendar.get(Calendar.DAY_OF_MONTH)
-                );
-
-                mDatePickerDialog.getDatePicker().setSpinnersShown(false); //ピッカーを消す
-                mDatePickerDialog.getDatePicker().setCalendarViewShown(true); //カレンダーを消す
-                mDatePickerDialog.getDatePicker().getCalendarView().setShowWeekNumber(false);
-                mDatePickerDialog.show();
-
             }
         }.execute();
     }
@@ -411,8 +391,37 @@ public class MainActivity extends Activity implements View.OnClickListener {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // ActionBarDrawerToggleにandroid.id.home(up ナビゲーション)を渡す。
-        if (mDrawerToggle.onOptionsItemSelected(item)) {
-            return true;
+        switch (item.getItemId()){
+            case android.R.id.home:
+                if (mDrawerToggle.onOptionsItemSelected(item)) {
+                    return true;
+                }
+                break;
+            case R.id.action_search:
+                Intent intent = new Intent(this, SearchActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.action_calendar:
+                final Calendar calendar = Calendar.getInstance();
+                mDatePickerDialog = new DatePickerDialog(
+                        MainActivity.this,
+                        new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                                //日付が確定された時の処理
+                                Toast.makeText(MainActivity.this, String.valueOf(dayOfMonth), Toast.LENGTH_SHORT).show();
+                            }
+                        },
+                        calendar.get(Calendar.YEAR),
+                        calendar.get(Calendar.MONTH),
+                        calendar.get(Calendar.DAY_OF_MONTH)
+                );
+
+                mDatePickerDialog.getDatePicker().setSpinnersShown(false); //ピッカーを消す
+                mDatePickerDialog.getDatePicker().setCalendarViewShown(true); //カレンダーを消す
+                mDatePickerDialog.getDatePicker().getCalendarView().setShowWeekNumber(false);
+                mDatePickerDialog.show();
+                break;
         }
         return super.onOptionsItemSelected(item);
     }

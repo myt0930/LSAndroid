@@ -27,6 +27,9 @@
         <activity
             android:name="jp.wmyt.test.app.SubActivity">
         </activity>
+        <activity
+            android:name="jp.wmyt.test.app.SearchActivity">
+        </activity>
     </application>
 
 </manifest>

@@ -17,12 +17,6 @@ public class SearchActivity extends Activity {
         getActionBar().setDisplayHomeAsUpEnabled(true);
         setContentView(R.layout.activity_sub);
 
-        Intent intent = getIntent();
-        int liveHouseNo = intent.getIntExtra("liveHouseNo", 2);
-
-        //タイトル設定
-        setTitle(LiveHouseTrait.getInstance().getLiveHouseName(liveHouseNo));
-
     }
 
     @Override
@@ -30,14 +24,14 @@ public class SearchActivity extends Activity {
         super.onDestroy();
 
         Common.getInstance().setLiveListType(Common.LIST_TYPE_LIVEHOUSE);
-        Log.d("SubActivity", "onDestroy");
+        Log.d("SearchActivity", "onDestroy");
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case android.R.id.home:
-                Log.d("SubActivity", "finish");
+                Log.d("SearchActivity", "finish");
                 finish();
                 break;
         }
