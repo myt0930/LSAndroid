@@ -13,6 +13,7 @@ import java.util.List;
 
 import jp.wmyt.test.app.Cell.LiveHouseCell;
 import jp.wmyt.test.app.Cell.LiveHouseCellAdapter;
+import jp.wmyt.test.app.Common;
 import jp.wmyt.test.app.Master.LiveHouseTrait;
 import jp.wmyt.test.app.SubActivity;
 
@@ -54,7 +55,8 @@ public class LiveHouseListFragment extends android.app.ListFragment{
                 Intent subIntent = new Intent(getActivity(), SubActivity.class);
                 LiveHouseCell cell = mCellList.get(position);
                 //TODO:
-                subIntent.putExtra("liveHouseNo", cell.getTrait().getLiveHouseNo());
+                int liveHouseNo = cell.getTrait().getLiveHouseNo();
+                Common.getInstance().setSelectLiveHouseNo(liveHouseNo);
                 startActivity(subIntent);
             }
         });

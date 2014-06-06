@@ -262,12 +262,19 @@ public class MainActivity extends Activity implements View.OnClickListener {
             @Override
             protected void onPostExecute(Void result) {
                 progressDialog.dismiss();
-                final LiveListFragment listFragment = new LiveListFragment();// (LiveListFragment)fragmentManager.findFragmentById(R.id.livelist_fragment);
 
                 FragmentManager manager = getFragmentManager();
-                FragmentTransaction transaction = fragmentManager.beginTransaction();
-                transaction.replace(R.id.content_frame, listFragment, "live_list");
-                transaction.commit();
+                if(manager.findFragmentByTag("live_list") == null) {
+
+                    final LiveListFragment listFragment = new LiveListFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putInt(Common.KEY_LIST_TYPE, Common.LIST_TYPE_DATE);
+                    listFragment.setArguments(bundle);
+
+                    FragmentTransaction transaction = fragmentManager.beginTransaction();
+                    transaction.replace(R.id.content_frame, listFragment, "live_list");
+                    transaction.commit();
+                }
             }
         }.execute();
     }
@@ -463,7 +470,13 @@ public class MainActivity extends Activity implements View.OnClickListener {
              *  ライブハウスリスト
              */
             if (fragmentManager.findFragmentByTag(TAG_BACKSTACK_LIVEHOUSE) == null) {
+
+
                 LiveHouseListFragment fragment = new LiveHouseListFragment();
+                Bundle bundle = new Bundle();
+                bundle.putInt(Common.KEY_LIST_TYPE, Common.LIST_TYPE_LIVEHOUSE);
+                fragment.setArguments(bundle);
+
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
                 transaction.replace(R.id.content_frame, fragment, TAG_BACKSTACK_LIVEHOUSE);
                 transaction.addToBackStack(TAG_BACKSTACK_LIVEHOUSE);
@@ -477,6 +490,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
              */
             if (fragmentManager.findFragmentByTag(TAG_BACKSTACK_FAV) == null) {
                 FavListFragment fragment = new FavListFragment();
+                Bundle bundle = new Bundle();
+                bundle.putInt(Common.KEY_LIST_TYPE, Common.LIST_TYPE_DATE);
+                fragment.setArguments(bundle);
+
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
                 transaction.replace(R.id.content_frame, fragment, TAG_BACKSTACK_FAV);
                 transaction.addToBackStack(TAG_BACKSTACK_FAV);

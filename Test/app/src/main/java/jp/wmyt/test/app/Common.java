@@ -11,29 +11,22 @@ public class Common {
     //シングルトン
     private static final Common instance = new Common();
     public Common(){
-        this.liveListType = LIST_TYPE_TODAY;
         this.liveDate = Calendar.getInstance().getTime();
     }
     public static Common getInstance(){
         return instance;
     }
 
-    static public int LIST_TYPE_TODAY   = 0;
-    static public int LIST_TYPE_DATE    = 1;
-    static public int LIST_TYPE_FAV     = 2;
-    static public int LIST_TYPE_LIVEHOUSE = 3;
+    static public String KEY_LIST_TYPE      = "kListType";
+    static public String KEY_DATE           = "kDate";
+    static public String KEY_LIVE_HOUSE_NO  = "kLiviHouseNo";
+    static public final int LIST_TYPE_DATE        = 0;
+    static public final int LIST_TYPE_FAV         = 1;
+    static public final int LIST_TYPE_LIVEHOUSE   = 2;
 
-    private int liveListType;
     private Date liveDate;
+    private int selectLiveHouseNo;
     private String searchString;
-
-    public int getLiveListType() {
-        return liveListType;
-    }
-
-    public void setLiveListType(int liveListType) {
-        this.liveListType = liveListType;
-    }
 
     public Date getLiveDate() {
         return liveDate;
@@ -49,5 +42,13 @@ public class Common {
 
     public void setSearchString(String searchString) {
         this.searchString = searchString;
+    }
+
+    public int getSelectLiveHouseNo() {
+        return selectLiveHouseNo;
+    }
+
+    public void setSelectLiveHouseNo(int selectLiveHouseNo) {
+        this.selectLiveHouseNo = selectLiveHouseNo;
     }
 }

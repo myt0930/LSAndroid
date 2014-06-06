@@ -5,9 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <fragment android:name="jp.wmyt.test.app.Fragment.LiveListFragment"
-        android:id="@+id/sub_live_list_fragment"
+    <FrameLayout
+        android:id="@+id/sub_content_frame"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        />
+        android:layout_height="match_parent" />
 </LinearLayout>

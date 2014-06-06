@@ -84,7 +84,6 @@ public class SearchActivity extends Activity {
     protected void onDestroy() {
         super.onDestroy();
 
-        Common.getInstance().setLiveListType(Common.LIST_TYPE_LIVEHOUSE);
         Log.d("SearchActivity", "onDestroy");
     }
 

@@ -1,11 +1,14 @@
 package jp.wmyt.test.app;
 
 import android.app.Activity;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 
+import jp.wmyt.test.app.Fragment.LiveListFragment;
 import jp.wmyt.test.app.Master.LiveHouseTrait;
 
 /**
@@ -17,11 +20,20 @@ public class SubActivity extends Activity {
         getActionBar().setDisplayHomeAsUpEnabled(true);
         setContentView(R.layout.activity_sub);
 
-        Intent intent = getIntent();
-        int liveHouseNo = intent.getIntExtra("liveHouseNo", 2);
+        int liveHouseNo = Common.getInstance().getSelectLiveHouseNo();
 
         //タイトル設定
         setTitle(LiveHouseTrait.getInstance().getLiveHouseName(liveHouseNo));
+
+        final LiveListFragment listFragment = new LiveListFragment();
+        Bundle bundle = new Bundle();
+        bundle.putInt(Common.KEY_LIST_TYPE, Common.LIST_TYPE_LIVEHOUSE);
+        listFragment.setArguments(bundle);
+
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.replace(R.id.sub_content_frame, listFragment, "live_list");
+        transaction.commit();
 
     }
 
@@ -29,7 +41,6 @@ public class SubActivity extends Activity {
     protected void onDestroy() {
         super.onDestroy();
 
-        Common.getInstance().setLiveListType(Common.LIST_TYPE_LIVEHOUSE);
         Log.d("SubActivity", "onDestroy");
     }
 

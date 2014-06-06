@@ -16,6 +16,7 @@ import java.util.List;
 
 import jp.wmyt.test.app.Cell.CustomCell;
 import jp.wmyt.test.app.Cell.CustomCellAdapter;
+import jp.wmyt.test.app.Common;
 import jp.wmyt.test.app.DetailActivity;
 import jp.wmyt.test.app.Master.LiveInfoTrait;
 
@@ -28,6 +29,7 @@ public class LiveListFragment extends ListFragment {
     List<CustomCell> mCellList = new ArrayList<CustomCell>();
     ListView mListView = null;
     CustomCellAdapter mCustomListAdapter = null;
+    int mListType;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -48,6 +50,7 @@ public class LiveListFragment extends ListFragment {
         mListView = getListView();
         mCustomListAdapter = new CustomCellAdapter (activity, 0, mCellList);
         setListAdapter(mCustomListAdapter);
+        mListType = getArguments().getInt(Common.KEY_LIST_TYPE);
 
         /**
          * リストの項目をクリックしたときの処理（今回は違うActivityにタッチした場所ごとの値を渡して呼び出します）
@@ -69,7 +72,23 @@ public class LiveListFragment extends ListFragment {
     public void setCellList(){
         mCellList.clear();
 
-        ArrayList<LiveInfoTrait> traitList = LiveInfoTrait.getInstance().getTraitList();
+        LiveInfoTrait instance = LiveInfoTrait.getInstance();
+        ArrayList<LiveInfoTrait> traitList = null;
+        switch (mListType){
+            case Common.LIST_TYPE_DATE:
+                traitList = instance.getTraitListOfDate(Common.getInstance().getLiveDate());
+                break;
+            case Common.LIST_TYPE_FAV:
+                //TODO
+                traitList = instance.getTraitListOfDate(Common.getInstance().getLiveDate());
+                break;
+            case Common.LIST_TYPE_LIVEHOUSE:
+                traitList = instance.getTraitListOfLiveHouseNo(Common.getInstance().getSelectLiveHouseNo());
+                break;
+            default:
+                break;
+        }
+
         for(LiveInfoTrait trait : traitList){
             CustomCell cell = new CustomCell();
             cell.setLiveInfoTrait(trait);
