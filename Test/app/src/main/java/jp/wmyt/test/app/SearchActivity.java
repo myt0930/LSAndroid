@@ -3,6 +3,7 @@ package jp.wmyt.test.app;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.util.Log;
@@ -30,8 +31,22 @@ public class SearchActivity extends Activity {
         public boolean onQueryTextChange(String newText) {
 
             Log.d(TAG, "onQueryTextChange Searching for: " + newText);
-            Common.getInstance().setSearchString(newText);
-            mListFragment.setCellList();
+
+            final String searchText = newText;
+
+            new AsyncTask<Void, Void, Void>() {
+                @Override
+                protected Void doInBackground(Void... params) {
+                    Common.getInstance().setSearchString(searchText);
+                    mListFragment.setCellList();
+                    return null;
+                }
+
+                protected void onPostExecute(Void result) {
+                    mListFragment.doCellChange();
+                }
+            }.execute();
+
 
             return true;
         }
@@ -46,8 +61,8 @@ public class SearchActivity extends Activity {
         public boolean onQueryTextSubmit(String query) {
 
             Log.d(TAG, "onQueryTextSubmit Searching for: " + query);
-            Common.getInstance().setSearchString(query);
-            mListFragment.setCellList();
+//            Common.getInstance().setSearchString(query);
+//            mListFragment.setCellList();
 
             return true;
         }

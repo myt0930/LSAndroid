@@ -62,6 +62,7 @@ public class LiveHouseListFragment extends android.app.ListFragment{
         });
 
         setCellList();
+        doCellChange();
     }
 
     public void setCellList(){
@@ -74,7 +75,9 @@ public class LiveHouseListFragment extends android.app.ListFragment{
             cell.setTrait(trait);
             mCellList.add(cell);
         }
+    }
 
+    public void doCellChange(){
         mLiveHouseListAdapter.notifyDataSetChanged();
         mListView.invalidateViews();
     }

@@ -67,6 +67,7 @@ public class LiveListFragment extends ListFragment {
         });
 
         setCellList();
+        doCellChange();
     }
 
     public void setCellList(){
@@ -99,6 +100,9 @@ public class LiveListFragment extends ListFragment {
                 mCellList.add(cell);
             }
         }
+    }
+
+    public void doCellChange(){
         mCustomListAdapter.notifyDataSetChanged();
         mListView.invalidateViews();
     }

@@ -428,6 +428,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
                                 LiveListFragment liveListFragment = (LiveListFragment) getFragmentManager().findFragmentByTag(TAG_BACKSTACK_LIVE);
                                 liveListFragment.setCellList();
+                                liveListFragment.doCellChange();
                             }
                         },
                         calendar.get(Calendar.YEAR),

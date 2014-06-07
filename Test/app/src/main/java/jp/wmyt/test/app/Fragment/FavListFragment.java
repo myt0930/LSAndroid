@@ -64,6 +64,7 @@ public class FavListFragment  extends ListFragment {
         });
 
         setCellList();
+        doCellChange();
     }
 
     public void setCellList(){
@@ -85,7 +86,9 @@ public class FavListFragment  extends ListFragment {
                 break;
             }
         }
+    }
 
+    public void doCellChange(){
         mCustomListAdapter.notifyDataSetChanged();
         mListView.invalidateViews();
     }
