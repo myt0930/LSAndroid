@@ -23,7 +23,7 @@ public class DetailActivity extends Activity {
 
         Intent intent = getIntent();
         String uniqueId = intent.getStringExtra("uniqueId");
-        LiveInfoTrait trait = LiveInfoTrait.getInstance().getTraitOfUniqueID("201405101001");
+        LiveInfoTrait trait = LiveInfoTrait.getInstance().getTraitOfUniqueID(uniqueId);
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
         String dateStr = dateFormat.format(trait.getLiveDate());

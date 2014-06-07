@@ -23,7 +23,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.DatePicker;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -57,6 +56,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     public static final String PREF_NAME_SAMPLE = "prefLiveScheduler";
     static final String TAG_BACKSTACK_LIVEHOUSE = "liveHouse";
     static final String TAG_BACKSTACK_FAV = "fav";
+    static final String TAG_BACKSTACK_LIVE = "liveList";
 
     static boolean isCheckUpdate = true;
 
@@ -152,6 +152,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     protected void onStart() {
         super.onStart();
 
+        Common.getInstance();
         if(isCheckUpdate) {
             showNeedUpdateDialog(true);
         }
@@ -272,7 +273,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                     listFragment.setArguments(bundle);
 
                     FragmentTransaction transaction = fragmentManager.beginTransaction();
-                    transaction.replace(R.id.content_frame, listFragment, "live_list");
+                    transaction.replace(R.id.content_frame, listFragment, TAG_BACKSTACK_LIVE);
                     transaction.commit();
                 }
             }
@@ -383,7 +384,11 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 if(result == 0){
                     //version.binをリネーム
                     File tempVersion = new File(getTempPath(VERSION_FILE));
-                    tempVersion.renameTo(new File(getResourcePath() + VERSION_FILE));
+
+                    if(!tempVersion.renameTo(new File(getResourcePath() + VERSION_FILE)))
+                    {
+                        Log.d("MainActivity","doDownloadMasterFile failed rename");
+                    }
 
                     showDoneUpdateDialog();
                 }else{
@@ -420,7 +425,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
                                 Calendar newCalendar = Calendar.getInstance();
                                 newCalendar.set(year, monthOfYear, dayOfMonth);
                                 Common.getInstance().setLiveDate(newCalendar.getTime());
-                                Toast.makeText(MainActivity.this, String.valueOf(dayOfMonth), Toast.LENGTH_SHORT).show();
+
+                                LiveListFragment liveListFragment = (LiveListFragment) getFragmentManager().findFragmentByTag(TAG_BACKSTACK_LIVE);
+                                liveListFragment.setCellList();
                             }
                         },
                         calendar.get(Calendar.YEAR),
@@ -514,7 +521,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         byte[] byteData = new byte[4];
         in.read(byteData, 0, 4);
         ByteBuffer buffer = ByteBuffer.wrap(byteData);
-        buffer.order(ByteOrder.BIG_ENDIAN);
+        buffer.order(ByteOrder.LITTLE_ENDIAN);
 
         return buffer.getInt();
     }

@@ -90,10 +90,13 @@ public class LiveInfoTrait {
 
     public ArrayList<LiveInfoTrait> getTraitListOfDate(Date date){
         ArrayList liveList = new ArrayList();
-        long dateTime1 = date.getTime();
+        long dateTime = date.getTime() / 1;
         for(LiveInfoTrait trait : traitList){
-            long dateTime2 = trait._liveDate.getTime();
-            int diffDays = (int)((dateTime1 - dateTime2) / 1000*60*24*24);
+            long traitTime = trait._liveDate.getTime();
+            if(dateTime < traitTime){
+                continue;
+            }
+            int diffDays = (int)((dateTime - traitTime) / (1000*60*60*24));
 
             if( diffDays == 0 ){
                 liveList.add(trait);
