@@ -85,16 +85,20 @@ public class LiveListFragment extends ListFragment {
             case Common.LIST_TYPE_LIVEHOUSE:
                 traitList = instance.getTraitListOfLiveHouseNo(Common.getInstance().getSelectLiveHouseNo());
                 break;
+            case Common.LIST_TYPE_SEARCH:
+                traitList = instance.getTraitListOfContainsText(Common.getInstance().getSearchString());
+                break;
             default:
                 break;
         }
 
-        for(LiveInfoTrait trait : traitList){
-            CustomCell cell = new CustomCell();
-            cell.setLiveInfoTrait(trait);
-            mCellList.add(cell);
+        if(traitList != null) {
+            for (LiveInfoTrait trait : traitList) {
+                CustomCell cell = new CustomCell();
+                cell.setLiveInfoTrait(trait);
+                mCellList.add(cell);
+            }
         }
-
         mCustomListAdapter.notifyDataSetChanged();
         mListView.invalidateViews();
     }

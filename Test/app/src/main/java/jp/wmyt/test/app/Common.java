@@ -23,6 +23,7 @@ public class Common {
     static public final int LIST_TYPE_DATE        = 0;
     static public final int LIST_TYPE_FAV         = 1;
     static public final int LIST_TYPE_LIVEHOUSE   = 2;
+    static public final int LIST_TYPE_SEARCH      = 3;
 
     private Date liveDate;
     private int selectLiveHouseNo;

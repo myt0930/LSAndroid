@@ -122,6 +122,26 @@ public class LiveInfoTrait {
         return liveList;
     }
 
+    public ArrayList<LiveInfoTrait> getTraitListOfContainsText(String searchStr){
+        ArrayList liveList = new ArrayList();
+        if(searchStr == null){
+            return liveList;
+        }
+
+        searchStr = searchStr.toLowerCase();
+
+        for(LiveInfoTrait trait : traitList){
+            String title = trait._eventTitle.toLowerCase();
+            String act = trait._act.toLowerCase();
+            if(title.contains(searchStr) || act.contains(searchStr)){
+                liveList.add(trait);
+            }
+        }
+
+        return liveList;
+    }
+
+
     public LiveInfoTrait getTraitOfUniqueID(String uniqueID){
         for(LiveInfoTrait trait : traitList){
             if(uniqueID.equals(trait._uniqueID)){

@@ -1,19 +1,23 @@
 package jp.wmyt.test.app;
 
 import android.app.Activity;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.SearchView;
+
+import jp.wmyt.test.app.Fragment.LiveListFragment;
 
 /**
  * Created by JP10733 on 2014/06/05.
  */
 public class SearchActivity extends Activity {
     private static final String TAG = "SearchActivity";
+    private static LiveListFragment mListFragment;
     // SearchVIewのリスナー
     private final SearchView.OnQueryTextListener mOnQueryTextListener = new SearchView.OnQueryTextListener() {
         /*
@@ -25,9 +29,9 @@ public class SearchActivity extends Activity {
         @Override
         public boolean onQueryTextChange(String newText) {
 
-            Log.d(TAG, "onQueryTextChange "
-                    + (TextUtils.isEmpty(newText) ? "" : "Query so far: "
-                    + newText));
+            Log.d(TAG, "onQueryTextChange Searching for: " + newText);
+            Common.getInstance().setSearchString(newText);
+            mListFragment.setCellList();
 
             return true;
         }
@@ -42,7 +46,8 @@ public class SearchActivity extends Activity {
         public boolean onQueryTextSubmit(String query) {
 
             Log.d(TAG, "onQueryTextSubmit Searching for: " + query);
-
+            Common.getInstance().setSearchString(query);
+            mListFragment.setCellList();
 
             return true;
         }
@@ -72,10 +77,20 @@ public class SearchActivity extends Activity {
         searchView.setSubmitButtonEnabled(false);
 
         // SearchViewに何も入力していない時のテキストを設定
-        searchView.setQueryHint("検索文字を入力して下さい。");
+        searchView.setQueryHint("イベント名、出演者を検索");
 
         // リスナーを登録する
         searchView.setOnQueryTextListener(mOnQueryTextListener);
+
+        mListFragment = new LiveListFragment();
+        Bundle bundle = new Bundle();
+        bundle.putInt(Common.KEY_LIST_TYPE, Common.LIST_TYPE_SEARCH);
+        mListFragment.setArguments(bundle);
+
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.replace(R.id.sub_content_frame, mListFragment, "live_list");
+        transaction.commit();
 
         return super.onCreateOptionsMenu(menu);
     }
