@@ -68,10 +68,8 @@ public class DetailActivity extends Activity implements View.OnClickListener{
 
     @Override
     public void onClick(View view) {
-        //if(view == _favButton){
-            _isFavorite = !_isFavorite;
-            changeFavColor();
-        //}
+        _isFavorite = !_isFavorite;
+        changeFavColor();
     }
 
     @Override

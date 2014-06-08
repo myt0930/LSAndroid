@@ -38,15 +38,33 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-        <TextView
-            android:id="@+id/place"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="12sp"
-            android:text="ライブハウス名"
-            android:textColor="#ee6557"
-            android:paddingTop="2dp"
-            android:textStyle="bold" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+
+            <TextView
+                android:id="@+id/place"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:text="ライブハウス名"
+                android:textColor="#ee6557"
+                android:paddingTop="2dp"
+                android:textStyle="bold" />
+
+            <ImageButton
+                android:layout_width="match_parent"
+                android:layout_height="14dp"
+                android:id="@+id/list_fav_button"
+                android:background="@null"
+                android:src="@drawable/star_64"
+                android:duplicateParentState="true"
+                android:scaleType="fitEnd"
+                android:paddingRight="10dp"
+                android:paddingTop="2dp" />
+        </LinearLayout>
 
         <TextView
             android:id="@+id/title"

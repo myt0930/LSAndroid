@@ -5,25 +5,43 @@
     android:layout_height="match_parent"
     android:background="@color/white">
 
-    <Switch
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="お気に入り"
-        android:id="@+id/switch1"
-        android:layout_gravity="right" />
-
-    <TextView
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Place"
-        android:id="@+id/detail_place"
-        android:paddingLeft="20dp"
-        android:textColor="@color/red"
-        android:textSize="16sp"
-        android:textStyle="bold|normal"
-        android:typeface="sans"
-        android:paddingBottom="5dp"
-        android:paddingRight="20dp" />
+        android:weightSum="1">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="Place"
+            android:id="@+id/detail_place"
+            android:paddingLeft="20dp"
+            android:textColor="@color/red"
+            android:textSize="16sp"
+            android:textStyle="bold|normal"
+            android:typeface="sans"
+            android:paddingBottom="5dp"
+            android:paddingRight="20dp"
+            android:gravity="center_vertical"
+            android:layout_marginTop="7dp" />
+
+        <RelativeLayout
+            android:id="@+id/fav_view"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:gravity="right"
+            android:layout_marginRight="10dp">
+
+            <ImageButton
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:id="@+id/fav_button"
+                android:background="@null"
+                android:src="@drawable/star_64"
+                android:duplicateParentState="true" />
+        </RelativeLayout>
+    </LinearLayout>
 
     <TextView
         android:layout_width="match_parent"
@@ -67,20 +85,6 @@
         android:textStyle="normal"
         android:typeface="sans"
         android:visibility="visible" />
-
-    <RelativeLayout
-        android:id="@+id/fav_view"
-        android:layout_width="80dp"
-        android:layout_height="80dp">
-
-        <ImageButton
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:id="@+id/fav_button"
-            android:background="@null"
-            android:src="@drawable/star_64"
-            android:duplicateParentState="true"/>
-    </RelativeLayout>
 
 
 </LinearLayout>
