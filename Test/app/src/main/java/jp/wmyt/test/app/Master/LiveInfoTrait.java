@@ -99,6 +99,10 @@ public class LiveInfoTrait {
             int diffDays = (int)((dateTime - traitTime) / (1000*60*60*24));
 
             if( diffDays == 0 ){
+                LiveInfoTrait section = new LiveInfoTrait();
+                section._uniqueID = "0";
+                section._sortNo = trait._sortNo;
+                liveList.add(section);
                 liveList.add(trait);
             }
         }

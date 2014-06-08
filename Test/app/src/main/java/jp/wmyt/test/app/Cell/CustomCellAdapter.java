@@ -3,6 +3,7 @@ package jp.wmyt.test.app.Cell;
 import android.content.Context;
 import android.content.res.Resources;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,13 +40,24 @@ public class CustomCellAdapter extends ArrayAdapter<CustomCell> {
 
         //- リスト用のレイアウトを初回のみ作成
         if( convertView == null ) {
-            convertView = layoutInflater.inflate(R.layout.custom_list, null);
+            if(trait.getUniqueID().equals("0")){
+                convertView = layoutInflater.inflate(R.layout.custom_list_section, null);
+            }else {
+                convertView = layoutInflater.inflate(R.layout.custom_list, null);
+            }
         }
 
+        if(trait.getUniqueID().equals("0")){
+            return convertView;
+        }
+
+        Log.d("",trait.getUniqueID());
         //- メッセージのセット
         TextView placeView = (TextView) convertView.findViewById(R.id.place);
+        Log.d("",String.valueOf(trait.getLiveHouseNo()));
+        Log.d("",LiveHouseTrait.getInstance().getLiveHouseName(trait.getLiveHouseNo()));
         placeView .setText(LiveHouseTrait.getInstance().getLiveHouseName(trait.getLiveHouseNo()));
-
+        Log.d("","---" + trait.getUniqueID());
         TextView titleView = (TextView) convertView.findViewById(R.id.title);
         titleView .setText(trait.getEventTitle());
 
