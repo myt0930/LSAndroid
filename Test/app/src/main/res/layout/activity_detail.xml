@@ -68,6 +68,19 @@
         android:typeface="sans"
         android:visibility="visible" />
 
+    <RelativeLayout
+        android:id="@+id/fav_view"
+        android:layout_width="80dp"
+        android:layout_height="80dp">
+
+        <ImageButton
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:id="@+id/fav_button"
+            android:background="@null"
+            android:src="@drawable/star_64"
+            android:duplicateParentState="true"/>
+    </RelativeLayout>
 
 
 </LinearLayout>

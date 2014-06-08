@@ -1,5 +1,14 @@
 package jp.wmyt.test.app;
 
+import android.util.Log;
+
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -12,6 +21,7 @@ public class Common {
     private static final Common instance = new Common();
     public Common(){
         this.liveDate = Calendar.getInstance().getTime();
+        this.favList = new ArrayList<String>();
     }
     public static Common getInstance(){
         return instance;
@@ -28,6 +38,7 @@ public class Common {
     private Date liveDate;
     private int selectLiveHouseNo;
     private String searchString;
+    private ArrayList<String> favList;
 
     public Date getLiveDate() {
         return liveDate;
@@ -51,5 +62,47 @@ public class Common {
 
     public void setSelectLiveHouseNo(int selectLiveHouseNo) {
         this.selectLiveHouseNo = selectLiveHouseNo;
+    }
+
+    private void addFavoriteList(String uniqueId){
+        favList.add(uniqueId);
+        saveData();
+    }
+
+    private void removeFavoriteList(String uniqueId){
+        favList.remove(uniqueId);
+        saveData();
+    }
+
+    public ArrayList<String> getFavList() {
+        return favList;
+    }
+
+    public void saveData(){
+        try {
+            PrintWriter pw = new PrintWriter(new FileOutputStream("saveData"));
+            for (String uniqueId : favList) {
+                pw.println(uniqueId);
+            }
+            pw.close();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public void readData(){
+        favList.clear();
+
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader("saveData"));
+            String s;
+            while ((s = reader.readLine()) != null) {
+                favList.add(s);
+            }
+        }catch (FileNotFoundException e){
+            Log.d("Common", "saveData not Found");
+        }catch (IOException e){
+            e.printStackTrace();
+        }
     }
 }

@@ -120,6 +120,11 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 preferences.edit().remove(EX_STACK_TRACE).commit();
             }
         }
+
+        // データロード
+        {
+            Common.getInstance().readData();
+        }
     }
 
     @Override
