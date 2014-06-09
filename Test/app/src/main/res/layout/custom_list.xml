@@ -54,16 +54,16 @@
                 android:paddingTop="2dp"
                 android:textStyle="bold" />
 
-            <ImageButton
+            <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="14dp"
                 android:id="@+id/list_fav_button"
                 android:background="@null"
                 android:src="@drawable/star_64"
-                android:duplicateParentState="true"
                 android:scaleType="fitEnd"
                 android:paddingRight="10dp"
                 android:paddingTop="2dp" />
+
         </LinearLayout>
 
         <TextView

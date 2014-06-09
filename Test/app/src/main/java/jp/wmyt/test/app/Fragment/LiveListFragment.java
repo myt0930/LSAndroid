@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
@@ -19,6 +20,7 @@ import jp.wmyt.test.app.Cell.CustomCellAdapter;
 import jp.wmyt.test.app.Common;
 import jp.wmyt.test.app.DetailActivity;
 import jp.wmyt.test.app.Master.LiveInfoTrait;
+import jp.wmyt.test.app.SearchActivity;
 
 /**
  * Created by miyata on 2014/05/04.
@@ -59,10 +61,29 @@ public class LiveListFragment extends ListFragment {
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id){
+                String activityName = getActivity().getLocalClassName();
+                if(activityName.equals("SearchActivity")){
+                    ((SearchActivity)getActivity()).closeSearchKeyboard();
+                }
                 Intent detailIntent = new Intent(getActivity(), DetailActivity.class);
                 CustomCell cell = mCellList.get(position);
                 detailIntent.putExtra("uniqueId", cell.getLiveTrait().getUniqueID());
                 startActivity(detailIntent);
+            }
+        });
+
+        mListView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView absListView, int i) {
+                String activityName = getActivity().getLocalClassName();
+                if(activityName.equals("SearchActivity")){
+                    ((SearchActivity)getActivity()).closeSearchKeyboard();
+                }
+            }
+
+            @Override
+            public void onScroll(AbsListView absListView, int i, int i2, int i3) {
+
             }
         });
 

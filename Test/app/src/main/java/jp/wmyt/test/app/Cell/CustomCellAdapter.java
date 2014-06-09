@@ -8,7 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.Calendar;
@@ -54,7 +54,7 @@ public class CustomCellAdapter extends ArrayAdapter<CustomCell> {
         Log.d("",trait.getUniqueID());
         //- メッセージのセット
         TextView placeView = (TextView) convertView.findViewById(R.id.place);
-        Log.d("",String.valueOf(trait.getLiveHouseNo()));
+        Log.d("", String.valueOf(trait.getLiveHouseNo()));
         Log.d("",LiveHouseTrait.getInstance().getLiveHouseName(trait.getLiveHouseNo()));
         placeView .setText(LiveHouseTrait.getInstance().getLiveHouseName(trait.getLiveHouseNo()));
         Log.d("","---" + trait.getUniqueID());
@@ -85,8 +85,9 @@ public class CustomCellAdapter extends ArrayAdapter<CustomCell> {
             dayOfWeekView.setTextColor(res.getColor(R.color.black));
         }
 
-        ImageButton favStar = (ImageButton)convertView.findViewById(R.id.list_fav_button);
+        ImageView favStar = (ImageView)convertView.findViewById(R.id.list_fav_button);
         favStar.setColorFilter(getContext().getResources().getColor(R.color.fav));
+
 
         return convertView;
     }

@@ -69,6 +69,10 @@ public class SearchActivity extends Activity {
         }
     };
 
+    public void closeSearchKeyboard(){
+        mSearchView.onActionViewCollapsed();
+    }
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getActionBar().setDisplayHomeAsUpEnabled(true);
