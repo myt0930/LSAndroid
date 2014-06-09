@@ -3,7 +3,6 @@ package jp.wmyt.test.app.Cell;
 import android.content.Context;
 import android.content.res.Resources;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,55 +38,55 @@ public class CustomCellAdapter extends ArrayAdapter<CustomCell> {
         LiveInfoTrait trait = item.getLiveTrait();
 
         //- リスト用のレイアウトを初回のみ作成
-        if( convertView == null ) {
+        //if( convertView == null ) {
             if(trait.getUniqueID().equals("0")){
                 convertView = layoutInflater.inflate(R.layout.custom_list_section, null);
             }else {
                 convertView = layoutInflater.inflate(R.layout.custom_list, null);
             }
-        }
+        //}
 
         if(trait.getUniqueID().equals("0")){
             return convertView;
         }
 
-        Log.d("",trait.getUniqueID());
         //- メッセージのセット
-        TextView placeView = (TextView) convertView.findViewById(R.id.place);
-        Log.d("", String.valueOf(trait.getLiveHouseNo()));
-        Log.d("",LiveHouseTrait.getInstance().getLiveHouseName(trait.getLiveHouseNo()));
-        placeView .setText(LiveHouseTrait.getInstance().getLiveHouseName(trait.getLiveHouseNo()));
-        Log.d("","---" + trait.getUniqueID());
-        TextView titleView = (TextView) convertView.findViewById(R.id.title);
-        titleView .setText(trait.getEventTitle());
+        try {
+            TextView placeView = (TextView) convertView.findViewById(R.id.place);
+            placeView.setText(LiveHouseTrait.getInstance().getLiveHouseName(trait.getLiveHouseNo()));
 
-        TextView actView = (TextView) convertView.findViewById(R.id.act);
-        actView .setText(trait.getAct().replace("\n", "/"));
+            TextView titleView = (TextView) convertView.findViewById(R.id.title);
+            titleView.setText(trait.getEventTitle());
 
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(trait.getLiveDate());
+            TextView actView = (TextView) convertView.findViewById(R.id.act);
+            actView.setText(trait.getAct().replace("\n", "/"));
 
-        TextView dateView = (TextView) convertView.findViewById(R.id.date);
-        String date = String.valueOf(cal.get(Calendar.DATE));
-        dateView.setText(date);
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(trait.getLiveDate());
 
-        //曜日
-        String dayOfWeek = trait.getDayOfWeek();
-        TextView dayOfWeekView = (TextView) convertView.findViewById(R.id.day_of_week);
-        dayOfWeekView .setText("(" + dayOfWeek + ")");
+            TextView dateView = (TextView) convertView.findViewById(R.id.date);
+            String date = String.valueOf(cal.get(Calendar.DATE));
+            dateView.setText(date);
 
-        Resources res = getContext().getResources();
-        if(dayOfWeek.equals("日")){
-            dayOfWeekView.setTextColor(res.getColor(R.color.red));
-        }else if(dayOfWeek.equals("土")){
-            dayOfWeekView.setTextColor(res.getColor(R.color.blue));
-        }else{
-            dayOfWeekView.setTextColor(res.getColor(R.color.black));
+            //曜日
+            String dayOfWeek = trait.getDayOfWeek();
+            TextView dayOfWeekView = (TextView) convertView.findViewById(R.id.day_of_week);
+            dayOfWeekView.setText("(" + dayOfWeek + ")");
+
+            Resources res = getContext().getResources();
+            if (dayOfWeek.equals("日")) {
+                dayOfWeekView.setTextColor(res.getColor(R.color.red));
+            } else if (dayOfWeek.equals("土")) {
+                dayOfWeekView.setTextColor(res.getColor(R.color.blue));
+            } else {
+                dayOfWeekView.setTextColor(res.getColor(R.color.black));
+            }
+
+            ImageView favStar = (ImageView) convertView.findViewById(R.id.list_fav_button);
+            favStar.setColorFilter(getContext().getResources().getColor(R.color.fav));
+        }catch (Exception e){
+            e.printStackTrace();
         }
-
-        ImageView favStar = (ImageView)convertView.findViewById(R.id.list_fav_button);
-        favStar.setColorFilter(getContext().getResources().getColor(R.color.fav));
-
 
         return convertView;
     }

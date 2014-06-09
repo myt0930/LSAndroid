@@ -67,6 +67,9 @@ public class LiveListFragment extends ListFragment {
                 }
                 Intent detailIntent = new Intent(getActivity(), DetailActivity.class);
                 CustomCell cell = mCellList.get(position);
+                if(cell.getLiveTrait().getUniqueID().equals("0")){
+                    return;
+                }
                 detailIntent.putExtra("uniqueId", cell.getLiveTrait().getUniqueID());
                 startActivity(detailIntent);
             }

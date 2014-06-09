@@ -29,8 +29,10 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import jp.wmyt.test.app.Fragment.ErrorDialogFragment;
@@ -67,10 +69,12 @@ public class MainActivity extends Activity implements View.OnClickListener {
     CustomDrawerAdapter mDrawerAdapter;
     List<DrawerItem> mDrawerDataList;
 
+    static String[] dayName = {"日", "月", "火", "水", "木", "金", "土"};
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        setTitle("新宿Motion");
+        setTitleDate();
 
         // サイドから出てくるメニュー
         {
@@ -125,6 +129,17 @@ public class MainActivity extends Activity implements View.OnClickListener {
         {
             Common.getInstance().readData();
         }
+    }
+
+    private void setTitleDate(){
+        Date date = Common.getInstance().getLiveDate();
+        Calendar day = Calendar.getInstance();
+        day.setTime(date);
+        String dayOfWeek = dayName[day.get(Calendar.DAY_OF_WEEK)-1];
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+        String dateStr = dateFormat.format(Common.getInstance().getLiveDate());
+        setTitle(dateStr + "(" + dayOfWeek + ")");
     }
 
     @Override
@@ -430,6 +445,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                                 Calendar newCalendar = Calendar.getInstance();
                                 newCalendar.set(year, monthOfYear, dayOfMonth);
                                 Common.getInstance().setLiveDate(newCalendar.getTime());
+                                setTitleDate();
 
                                 LiveListFragment liveListFragment = (LiveListFragment) getFragmentManager().findFragmentByTag(TAG_BACKSTACK_LIVE);
                                 liveListFragment.setCellList();
@@ -478,6 +494,12 @@ public class MainActivity extends Activity implements View.OnClickListener {
             {
                 onBackPressed();
             }
+            Common.getInstance().setLiveDate(new Date());
+            setTitleDate();
+
+            LiveListFragment liveListFragment = (LiveListFragment) getFragmentManager().findFragmentByTag(TAG_BACKSTACK_LIVE);
+            liveListFragment.setCellList();
+            liveListFragment.doCellChange();
         }else if( position == 1 ) {
             /*
              *  ライブハウスリスト
