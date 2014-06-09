@@ -13,7 +13,7 @@
         <activity
             android:name="jp.wmyt.test.app.MainActivity"
             android:label="Live Scheduler"
-            android:configChanges="orientation">
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -22,13 +22,15 @@
         </activity>
         <activity
             android:name="jp.wmyt.test.app.DetailActivity"
-            android:label="@string/title_detail" >
+            android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name="jp.wmyt.test.app.SubActivity">
+            android:name="jp.wmyt.test.app.SubActivity"
+            android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name="jp.wmyt.test.app.SearchActivity">
+            android:name="jp.wmyt.test.app.SearchActivity"
+            android:screenOrientation="portrait">
         </activity>
     </application>
 
