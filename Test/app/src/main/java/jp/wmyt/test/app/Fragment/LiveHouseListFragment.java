@@ -54,7 +54,7 @@ public class LiveHouseListFragment extends android.app.ListFragment{
             public void onItemClick(AdapterView<?> parent, View view, int position, long id){
                 Intent subIntent = new Intent(getActivity(), SubActivity.class);
                 LiveHouseCell cell = mCellList.get(position);
-                //TODO:
+
                 int liveHouseNo = cell.getTrait().getLiveHouseNo();
                 Common.getInstance().setSelectLiveHouseNo(liveHouseNo);
                 startActivity(subIntent);

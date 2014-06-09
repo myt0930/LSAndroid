@@ -17,6 +17,7 @@ import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -466,6 +467,55 @@ public class MainActivity extends Activity implements View.OnClickListener {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(keyCode==KeyEvent.KEYCODE_BACK){
+
+            FragmentManager fragmentManager = getFragmentManager();
+            int backStackCount = fragmentManager.getBackStackEntryCount();
+
+            switch (backStackCount){
+                case 0:
+                    // 本当に終了するかダイアログ
+                    AlertDialog.Builder progress = new AlertDialog.Builder( MainActivity.this );
+                    progress.setTitle("アプリ終了");
+                    progress.setMessage("Live Schedulerを終了しますか？");
+                    progress.setPositiveButton("する",
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    finish();
+                                }
+                            }
+                    );
+                    progress.setNegativeButton("しない",
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+
+                                }
+                            }
+                    );
+                    progress.show();
+                    return false;
+
+                case 1:
+                    setTitleDate();
+                    break;
+                case 2:
+                    FragmentManager.BackStackEntry entry = fragmentManager.getBackStackEntryAt(0);
+                    if(entry.getName().equals(TAG_BACKSTACK_LIVEHOUSE)){
+                        setTitle("ライブハウス");
+                    }else{
+                        setTitle("お気に入り");
+                    }
+                    break;
+            }
+
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
     private boolean isTabletMode(){
         return getResources().getBoolean(R.bool.is_tablet);
     }
@@ -504,6 +554,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
             /*
              *  ライブハウスリスト
              */
+
+            setTitle("ライブハウス");
+
             if (fragmentManager.findFragmentByTag(TAG_BACKSTACK_LIVEHOUSE) == null) {
 
 
@@ -523,6 +576,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
             /*
              *  お気に入り
              */
+
+            setTitle("お気に入り");
+
             if (fragmentManager.findFragmentByTag(TAG_BACKSTACK_FAV) == null) {
                 FavListFragment fragment = new FavListFragment();
                 Bundle bundle = new Bundle();

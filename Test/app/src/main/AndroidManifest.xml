@@ -30,6 +30,7 @@
         </activity>
         <activity
             android:name="jp.wmyt.test.app.SearchActivity"
+            android:label="検索"
             android:screenOrientation="portrait">
         </activity>
     </application>
