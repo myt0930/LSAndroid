@@ -19,6 +19,8 @@ import jp.wmyt.test.app.Fragment.LiveListFragment;
 public class SearchActivity extends Activity {
     private static final String TAG = "SearchActivity";
     private static LiveListFragment mListFragment;
+    private static SearchView mSearchView;
+
     // SearchVIewのリスナー
     private final SearchView.OnQueryTextListener mOnQueryTextListener = new SearchView.OnQueryTextListener() {
         /*
@@ -61,8 +63,7 @@ public class SearchActivity extends Activity {
         public boolean onQueryTextSubmit(String query) {
 
             Log.d(TAG, "onQueryTextSubmit Searching for: " + query);
-//            Common.getInstance().setSearchString(query);
-//            mListFragment.setCellList();
+            mSearchView.onActionViewCollapsed();
 
             return true;
         }
@@ -84,18 +85,17 @@ public class SearchActivity extends Activity {
         //searchItem.expandActionView();
 
         // SearchViewを取得する
-        final SearchView searchView = (SearchView) MenuItemCompat
-                .getActionView(searchItem);
-        searchView.onActionViewExpanded();
+        mSearchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        mSearchView.onActionViewExpanded();
 
         // Submitボタンを表示するか
-        searchView.setSubmitButtonEnabled(false);
+        mSearchView.setSubmitButtonEnabled(false);
 
         // SearchViewに何も入力していない時のテキストを設定
-        searchView.setQueryHint("イベント名、出演者を検索");
+        mSearchView.setQueryHint("イベント名、出演者を検索");
 
         // リスナーを登録する
-        searchView.setOnQueryTextListener(mOnQueryTextListener);
+        mSearchView.setOnQueryTextListener(mOnQueryTextListener);
 
         mListFragment = new LiveListFragment();
         Bundle bundle = new Bundle();
