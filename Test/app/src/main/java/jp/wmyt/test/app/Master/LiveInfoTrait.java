@@ -99,10 +99,6 @@ public class LiveInfoTrait {
             int diffDays = (int)((dateTime - traitTime) / (1000*60*60*24));
 
             if( diffDays == 0 ){
-                LiveInfoTrait section = new LiveInfoTrait();
-                section._uniqueID = "0";
-                section._sortNo = trait._sortNo;
-                liveList.add(section);
                 liveList.add(trait);
             }
         }
@@ -114,12 +110,42 @@ public class LiveInfoTrait {
     }
 
     public ArrayList<LiveInfoTrait> getTraitListOfLiveHouseNo(int liveHouseNo){
-        ArrayList liveList = new ArrayList();
+        ArrayList<LiveInfoTrait> liveList = new ArrayList();
 
         Date currentDate = new Date();
         for(LiveInfoTrait trait : traitList){
             if(trait._liveHouseNo == liveHouseNo && !trait.isPastLive()){
                 liveList.add(trait);
+            }
+        }
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM");
+
+        String sectionString = "";
+        for(int i = liveList.size()-1;i >= 0;i--){
+            LiveInfoTrait trait = liveList.get(i);
+            if( i == liveList.size()-1 ){
+                sectionString = dateFormat.format(trait.getLiveDate());
+            }
+
+            String traitDate = dateFormat.format(trait.getLiveDate());
+            if( !sectionString.equals(traitDate) )
+            {
+                LiveInfoTrait section = new LiveInfoTrait();
+                section._liveHouseNo = -1;
+                section._uniqueID = sectionString;
+                liveList.add(i + 1, section);
+                sectionString = traitDate;
+            }
+        }
+
+        if(liveList.size() > 0){
+            LiveInfoTrait trait = (LiveInfoTrait) liveList.get(0);
+            if(trait != null) {
+                LiveInfoTrait section = new LiveInfoTrait();
+                section._liveHouseNo = -1;
+                section._uniqueID = dateFormat.format(trait.getLiveDate());
+                liveList.add(0, section);
             }
         }
 

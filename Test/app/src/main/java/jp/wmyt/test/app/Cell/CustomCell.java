@@ -36,7 +36,7 @@ public class CustomCell {
 
     public void setLiveInfoTrait(LiveInfoTrait trait){
         liveTrait       = trait;
-        if(liveTrait.getUniqueID().equals("0")){
+        if(liveTrait.getLiveHouseNo() == -1){
             return;
         }
 

@@ -58,6 +58,9 @@ public class FavListFragment  extends ListFragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id){
                 Intent detailIntent = new Intent(getActivity(), DetailActivity.class);
                 CustomCell cell = mCellList.get(position);
+                if(cell.getLiveTrait().getLiveHouseNo() == -1){
+                    return;
+                }
                 detailIntent.putExtra("uniqueId", cell.getLiveTrait().getUniqueID());
                 startActivity(detailIntent);
             }

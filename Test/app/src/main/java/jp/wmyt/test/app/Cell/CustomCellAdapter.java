@@ -39,16 +39,15 @@ public class CustomCellAdapter extends ArrayAdapter<CustomCell> {
 
         //- リスト用のレイアウトを初回のみ作成
         //if( convertView == null ) {
-            if(trait.getUniqueID().equals("0")){
+            if(trait.getLiveHouseNo() == -1){
                 convertView = layoutInflater.inflate(R.layout.custom_list_section, null);
+                TextView text = (TextView) convertView.findViewById(R.id.section_label);
+                text.setText(trait.getUniqueID());
+                return convertView;
             }else {
                 convertView = layoutInflater.inflate(R.layout.custom_list, null);
             }
         //}
-
-        if(trait.getUniqueID().equals("0")){
-            return convertView;
-        }
 
         //- メッセージのセット
         try {
