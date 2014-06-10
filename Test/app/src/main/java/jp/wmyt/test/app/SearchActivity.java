@@ -64,7 +64,7 @@ public class SearchActivity extends Activity {
 
             Log.d(TAG, "onQueryTextSubmit Searching for: " + query);
             mSearchView.onActionViewCollapsed();
-
+            setTitle(Common.getInstance().getSearchString());
             return true;
         }
     };

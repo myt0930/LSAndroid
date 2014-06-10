@@ -65,9 +65,14 @@ public class FavListFragment  extends ListFragment {
                 startActivity(detailIntent);
             }
         });
+    }
 
+    @Override
+    public void onResume() {
+        Log.d("FavListFragment","onResume");
         setCellList();
         doCellChange();
+        super.onResume();
     }
 
     public void setCellList(){

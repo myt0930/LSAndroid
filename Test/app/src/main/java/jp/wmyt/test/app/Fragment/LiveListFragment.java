@@ -81,6 +81,7 @@ public class LiveListFragment extends ListFragment {
                 String activityName = getActivity().getLocalClassName();
                 if(activityName.equals("SearchActivity")){
                     ((SearchActivity)getActivity()).closeSearchKeyboard();
+                    getActivity().setTitle(Common.getInstance().getSearchString());
                 }
             }
 
@@ -89,9 +90,13 @@ public class LiveListFragment extends ListFragment {
 
             }
         });
+    }
 
+    @Override
+    public void onResume() {
         setCellList();
         doCellChange();
+        super.onResume();
     }
 
     public void setCellList(){
