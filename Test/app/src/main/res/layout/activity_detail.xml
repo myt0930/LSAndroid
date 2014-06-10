@@ -40,8 +40,7 @@
                 android:id="@+id/fav_view"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
-                android:gravity="right"
-                android:layout_marginRight="10dp">
+                android:gravity="right">
 
                 <ImageButton
                     android:layout_width="64dp"
