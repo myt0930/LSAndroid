@@ -19,6 +19,7 @@ import jp.wmyt.test.app.Master.LiveInfoTrait;
 public class DetailActivity extends Activity implements View.OnClickListener{
     private boolean _isFavorite;
     private ImageButton _favButton;
+    private String uniqueId;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,11 +28,10 @@ public class DetailActivity extends Activity implements View.OnClickListener{
         setContentView(R.layout.activity_detail);
 
         Intent intent = getIntent();
-        String uniqueId = intent.getStringExtra("uniqueId");
+        uniqueId = intent.getStringExtra("uniqueId");
         LiveInfoTrait trait = LiveInfoTrait.getInstance().getTraitOfUniqueID(uniqueId);
 
-        //TODO
-        _isFavorite = true;
+        _isFavorite = trait.isFavorite();
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
         String dateStr = dateFormat.format(trait.getLiveDate());
@@ -69,6 +69,11 @@ public class DetailActivity extends Activity implements View.OnClickListener{
     @Override
     public void onClick(View view) {
         _isFavorite = !_isFavorite;
+        if(_isFavorite){
+            Common.getInstance().addFavoriteList(uniqueId);
+        }else{
+            Common.getInstance().removeFavoriteList(uniqueId);
+        }
         changeFavColor();
     }
 

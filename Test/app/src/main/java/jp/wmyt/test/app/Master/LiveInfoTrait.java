@@ -9,6 +9,8 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 
+import jp.wmyt.test.app.Common;
+
 /**
  * Created by miyata on 2014/05/06.
  */
@@ -119,8 +121,69 @@ public class LiveInfoTrait {
             }
         }
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM");
+        //セクションの追加
+        addSection(liveList);
 
+        return liveList;
+    }
+
+    public ArrayList<LiveInfoTrait> getTraitListOfContainsText(String searchStr){
+        ArrayList liveList = new ArrayList();
+        if(searchStr == null){
+            return liveList;
+        }
+
+        searchStr = searchStr.toLowerCase();
+
+        for(LiveInfoTrait trait : traitList){
+            String title = trait._eventTitle.toLowerCase();
+            String act = trait._act.toLowerCase();
+            if(title.contains(searchStr) || act.contains(searchStr)){
+                if(!trait.isPastLive()) {
+                    liveList.add(trait);
+                }
+            }
+        }
+
+        //ソート
+        Collections.sort(liveList, new LiveInfoTraitUniqueIdComparator());
+
+        //セクションの追加
+        addSection(liveList);
+
+        return liveList;
+    }
+
+    public ArrayList<LiveInfoTrait> getTraitListOfFavorite(){
+        ArrayList liveList = new ArrayList();
+        for(LiveInfoTrait trait : traitList){
+            if(trait.isPastLive()){
+                continue;
+            }
+
+            if(trait.isFavorite()){
+                liveList.add(trait);
+            }
+        }
+        //ソート
+        Collections.sort(liveList, new LiveInfoTraitUniqueIdComparator());
+
+        //セクションの追加
+        addSection(liveList);
+        return liveList;
+    }
+
+    public LiveInfoTrait getTraitOfUniqueID(String uniqueID){
+        for(LiveInfoTrait trait : traitList){
+            if(uniqueID.equals(trait._uniqueID)){
+                return trait;
+            }
+        }
+        return null;
+    }
+
+    private void addSection(ArrayList<LiveInfoTrait> liveList){
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM");
         String sectionString = "";
         for(int i = liveList.size()-1;i >= 0;i--){
             LiveInfoTrait trait = liveList.get(i);
@@ -148,37 +211,6 @@ public class LiveInfoTrait {
                 liveList.add(0, section);
             }
         }
-
-        return liveList;
-    }
-
-    public ArrayList<LiveInfoTrait> getTraitListOfContainsText(String searchStr){
-        ArrayList liveList = new ArrayList();
-        if(searchStr == null){
-            return liveList;
-        }
-
-        searchStr = searchStr.toLowerCase();
-
-        for(LiveInfoTrait trait : traitList){
-            String title = trait._eventTitle.toLowerCase();
-            String act = trait._act.toLowerCase();
-            if(title.contains(searchStr) || act.contains(searchStr)){
-                liveList.add(trait);
-            }
-        }
-
-        return liveList;
-    }
-
-
-    public LiveInfoTrait getTraitOfUniqueID(String uniqueID){
-        for(LiveInfoTrait trait : traitList){
-            if(uniqueID.equals(trait._uniqueID)){
-                return trait;
-            }
-        }
-        return null;
     }
 
     public Date getMinDate(){
@@ -257,10 +289,9 @@ public class LiveInfoTrait {
         }
     }
 
-
-    //TODO:
-    private boolean isFavorite(){
-        return false;
+    public boolean isFavorite(){
+        ArrayList<String> favList = Common.getInstance().getFavList();
+        return favList.contains(_uniqueID);
     }
 
     private boolean isPastLive(){
@@ -280,6 +311,19 @@ class LiveInfoTraitComparator implements java.util.Comparator {
         //               - (x < y)
         LiveInfoTrait trait1 = (LiveInfoTrait)s;
         LiveInfoTrait trait2 = (LiveInfoTrait)t;
+
         return trait1.getSortNo() - trait2.getSortNo();
+    }
+}
+
+class LiveInfoTraitUniqueIdComparator implements java.util.Comparator {
+    public int compare(Object s, Object t) {
+        //               + (x > y)
+        // compare x y = 0 (x = y)
+        //               - (x < y)
+        LiveInfoTrait trait1 = (LiveInfoTrait)s;
+        LiveInfoTrait trait2 = (LiveInfoTrait)t;
+
+        return trait1.getUniqueID().compareTo(trait2.getUniqueID());
     }
 }

@@ -73,21 +73,11 @@ public class FavListFragment  extends ListFragment {
     public void setCellList(){
         mCellList.clear();
 
-        ArrayList<LiveInfoTrait> traitList = LiveInfoTrait.getInstance().getTraitList();
-        //TODO: お気に入りライブのみ
-        int debugCount = 0;
+        ArrayList<LiveInfoTrait> traitList = LiveInfoTrait.getInstance().getTraitListOfFavorite();
         for(LiveInfoTrait trait : traitList){
-            debugCount++;
-            if(debugCount < 10){
-                continue;
-            }
             CustomCell cell = new CustomCell();
             cell.setLiveInfoTrait(trait);
             mCellList.add(cell);
-            debugCount++;
-            if(debugCount > 30){
-                break;
-            }
         }
     }
 

@@ -128,6 +128,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         // データロード
         {
+            Common.getInstance().setContext(this);
             Common.getInstance().readData();
         }
     }
@@ -480,7 +481,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                     AlertDialog.Builder progress = new AlertDialog.Builder( MainActivity.this );
                     progress.setTitle("アプリ終了");
                     progress.setMessage("Live Schedulerを終了しますか？");
-                    progress.setPositiveButton("する",
+                    progress.setPositiveButton("はい",
                             new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
@@ -488,7 +489,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                                 }
                             }
                     );
-                    progress.setNegativeButton("しない",
+                    progress.setNegativeButton("いいえ",
                             new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {

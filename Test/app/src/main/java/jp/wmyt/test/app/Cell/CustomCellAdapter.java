@@ -82,7 +82,11 @@ public class CustomCellAdapter extends ArrayAdapter<CustomCell> {
             }
 
             ImageView favStar = (ImageView) convertView.findViewById(R.id.list_fav_button);
-            favStar.setColorFilter(getContext().getResources().getColor(R.color.fav));
+            if(trait.isFavorite()) {
+                favStar.setColorFilter(getContext().getResources().getColor(R.color.fav));
+            }else{
+                favStar.setVisibility(View.INVISIBLE);
+            }
         }catch (Exception e){
             e.printStackTrace();
         }
