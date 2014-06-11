@@ -1,4 +1,4 @@
-package jp.wmyt.test.app.Fragment;
+package jp.wmyt.livescheduler.app.Fragment;
 
 import android.app.AlertDialog;
 import android.app.Dialog;

@@ -1,4 +1,4 @@
-package jp.wmyt.test.app.Master;
+package jp.wmyt.livescheduler.app.Master;
 
 import android.util.Log;
 
@@ -9,7 +9,7 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 
-import jp.wmyt.test.app.Common;
+import jp.wmyt.livescheduler.app.Common;
 
 /**
  * Created by miyata on 2014/05/06.

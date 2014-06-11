@@ -1,4 +1,4 @@
-package jp.wmyt.test.app.Fragment;
+package jp.wmyt.livescheduler.app.Fragment;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -11,11 +11,11 @@ import android.widget.ListView;
 import java.util.ArrayList;
 import java.util.List;
 
-import jp.wmyt.test.app.Cell.LiveHouseCell;
-import jp.wmyt.test.app.Cell.LiveHouseCellAdapter;
-import jp.wmyt.test.app.Common;
-import jp.wmyt.test.app.Master.LiveHouseTrait;
-import jp.wmyt.test.app.SubActivity;
+import jp.wmyt.livescheduler.app.Cell.LiveHouseCell;
+import jp.wmyt.livescheduler.app.Cell.LiveHouseCellAdapter;
+import jp.wmyt.livescheduler.app.Common;
+import jp.wmyt.livescheduler.app.Master.LiveHouseTrait;
+import jp.wmyt.livescheduler.app.SubActivity;
 
 /**
  * Created by miyata on 2014/05/25.

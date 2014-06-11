@@ -1,4 +1,4 @@
-package jp.wmyt.test.app;
+package jp.wmyt.livescheduler.app;
 
 /**
  * Created by miyata on 2014/05/24.

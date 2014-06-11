@@ -1,4 +1,4 @@
-package jp.wmyt.test.app;
+package jp.wmyt.livescheduler.app;
 
 import android.app.Activity;
 import android.app.FragmentManager;
@@ -11,7 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.SearchView;
 
-import jp.wmyt.test.app.Fragment.LiveListFragment;
+import jp.wmyt.livescheduler.app.Fragment.LiveListFragment;
 
 /**
  * Created by JP10733 on 2014/06/05.

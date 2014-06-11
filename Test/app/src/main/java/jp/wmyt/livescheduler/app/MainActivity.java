@@ -1,4 +1,4 @@
-package jp.wmyt.test.app;
+package jp.wmyt.livescheduler.app;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -36,13 +36,13 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import jp.wmyt.test.app.Fragment.ErrorDialogFragment;
-import jp.wmyt.test.app.Fragment.FavListFragment;
-import jp.wmyt.test.app.Fragment.LiveHouseListFragment;
-import jp.wmyt.test.app.Fragment.LiveListFragment;
-import jp.wmyt.test.app.Master.LiveHouseTrait;
-import jp.wmyt.test.app.Master.LiveInfoTrait;
-import jp.wmyt.test.app.Master.LoadData;
+import jp.wmyt.livescheduler.app.Fragment.ErrorDialogFragment;
+import jp.wmyt.livescheduler.app.Fragment.FavListFragment;
+import jp.wmyt.livescheduler.app.Fragment.LiveHouseListFragment;
+import jp.wmyt.livescheduler.app.Fragment.LiveListFragment;
+import jp.wmyt.livescheduler.app.Master.LiveHouseTrait;
+import jp.wmyt.livescheduler.app.Master.LiveInfoTrait;
+import jp.wmyt.livescheduler.app.Master.LoadData;
 
 public class MainActivity extends Activity implements View.OnClickListener {
 

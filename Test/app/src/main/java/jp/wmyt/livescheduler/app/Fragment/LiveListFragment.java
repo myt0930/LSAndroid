@@ -1,4 +1,4 @@
-package jp.wmyt.test.app.Fragment;
+package jp.wmyt.livescheduler.app.Fragment;
 
 import android.app.Activity;
 import android.app.ListFragment;
@@ -8,26 +8,30 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import jp.wmyt.test.app.Cell.CustomCell;
-import jp.wmyt.test.app.Cell.CustomCellAdapter;
-import jp.wmyt.test.app.DetailActivity;
-import jp.wmyt.test.app.Master.LiveInfoTrait;
+import jp.wmyt.livescheduler.app.Cell.CustomCell;
+import jp.wmyt.livescheduler.app.Cell.CustomCellAdapter;
+import jp.wmyt.livescheduler.app.Common;
+import jp.wmyt.livescheduler.app.DetailActivity;
+import jp.wmyt.livescheduler.app.Master.LiveInfoTrait;
+import jp.wmyt.livescheduler.app.SearchActivity;
 
 /**
- * Created by JP10733 on 2014/06/05.
+ * Created by miyata on 2014/05/04.
  */
-public class FavListFragment  extends ListFragment {
+public class LiveListFragment extends ListFragment {
     private onFragmentListClickedListener listener;
 
     List<CustomCell> mCellList = new ArrayList<CustomCell>();
     ListView mListView = null;
     CustomCellAdapter mCustomListAdapter = null;
+    int mListType;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -48,6 +52,7 @@ public class FavListFragment  extends ListFragment {
         mListView = getListView();
         mCustomListAdapter = new CustomCellAdapter (activity, 0, mCellList);
         setListAdapter(mCustomListAdapter);
+        mListType = getArguments().getInt(Common.KEY_LIST_TYPE);
 
         /**
          * リストの項目をクリックしたときの処理（今回は違うActivityにタッチした場所ごとの値を渡して呼び出します）
@@ -56,6 +61,10 @@ public class FavListFragment  extends ListFragment {
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id){
+                String activityName = getActivity().getLocalClassName();
+                if(activityName.equals("SearchActivity")){
+                    ((SearchActivity)getActivity()).closeSearchKeyboard();
+                }
                 Intent detailIntent = new Intent(getActivity(), DetailActivity.class);
                 CustomCell cell = mCellList.get(position);
                 if(cell.getLiveTrait().getLiveHouseNo() == -1){
@@ -65,11 +74,26 @@ public class FavListFragment  extends ListFragment {
                 startActivity(detailIntent);
             }
         });
+
+        mListView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView absListView, int i) {
+                String activityName = getActivity().getLocalClassName();
+                if(activityName.equals("SearchActivity")){
+                    ((SearchActivity)getActivity()).closeSearchKeyboard();
+                    getActivity().setTitle(Common.getInstance().getSearchString());
+                }
+            }
+
+            @Override
+            public void onScroll(AbsListView absListView, int i, int i2, int i3) {
+
+            }
+        });
     }
 
     @Override
     public void onResume() {
-        Log.d("FavListFragment","onResume");
         setCellList();
         doCellChange();
         super.onResume();
@@ -78,11 +102,32 @@ public class FavListFragment  extends ListFragment {
     public void setCellList(){
         mCellList.clear();
 
-        ArrayList<LiveInfoTrait> traitList = LiveInfoTrait.getInstance().getTraitListOfFavorite();
-        for(LiveInfoTrait trait : traitList){
-            CustomCell cell = new CustomCell();
-            cell.setLiveInfoTrait(trait);
-            mCellList.add(cell);
+        LiveInfoTrait instance = LiveInfoTrait.getInstance();
+        ArrayList<LiveInfoTrait> traitList = null;
+        switch (mListType){
+            case Common.LIST_TYPE_DATE:
+                traitList = instance.getTraitListOfDate(Common.getInstance().getLiveDate());
+                break;
+            case Common.LIST_TYPE_FAV:
+                //TODO
+                traitList = instance.getTraitListOfDate(Common.getInstance().getLiveDate());
+                break;
+            case Common.LIST_TYPE_LIVEHOUSE:
+                traitList = instance.getTraitListOfLiveHouseNo(Common.getInstance().getSelectLiveHouseNo());
+                break;
+            case Common.LIST_TYPE_SEARCH:
+                traitList = instance.getTraitListOfContainsText(Common.getInstance().getSearchString());
+                break;
+            default:
+                break;
+        }
+
+        if(traitList != null) {
+            for (LiveInfoTrait trait : traitList) {
+                CustomCell cell = new CustomCell();
+                cell.setLiveInfoTrait(trait);
+                mCellList.add(cell);
+            }
         }
     }
 

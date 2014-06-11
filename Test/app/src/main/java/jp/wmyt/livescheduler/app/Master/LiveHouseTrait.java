@@ -1,4 +1,4 @@
-package jp.wmyt.test.app.Master;
+package jp.wmyt.livescheduler.app.Master;
 
 import java.util.ArrayList;
 

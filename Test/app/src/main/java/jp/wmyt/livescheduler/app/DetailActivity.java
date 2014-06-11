@@ -1,4 +1,4 @@
-package jp.wmyt.test.app;
+package jp.wmyt.livescheduler.app;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -10,8 +10,8 @@ import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
 
-import jp.wmyt.test.app.Master.LiveHouseTrait;
-import jp.wmyt.test.app.Master.LiveInfoTrait;
+import jp.wmyt.livescheduler.app.Master.LiveHouseTrait;
+import jp.wmyt.livescheduler.app.Master.LiveInfoTrait;
 
 /**
  * Created by miyata on 2014/05/05.

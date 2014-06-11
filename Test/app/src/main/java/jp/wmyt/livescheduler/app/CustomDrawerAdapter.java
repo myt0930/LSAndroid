@@ -1,4 +1,4 @@
-package jp.wmyt.test.app;
+package jp.wmyt.livescheduler.app;
 
 import android.app.Activity;
 import android.content.Context;

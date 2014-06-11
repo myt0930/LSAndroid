@@ -1,4 +1,4 @@
-package jp.wmyt.test.app;
+package jp.wmyt.livescheduler.app;
 
 import android.app.Activity;
 import android.app.FragmentManager;
@@ -8,8 +8,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 
-import jp.wmyt.test.app.Fragment.LiveListFragment;
-import jp.wmyt.test.app.Master.LiveHouseTrait;
+import jp.wmyt.livescheduler.app.Fragment.LiveListFragment;
+import jp.wmyt.livescheduler.app.Master.LiveHouseTrait;
 
 /**
  * Created by miyata on 2014/06/01.

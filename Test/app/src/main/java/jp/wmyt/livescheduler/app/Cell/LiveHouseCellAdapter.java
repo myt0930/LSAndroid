@@ -1,4 +1,4 @@
-package jp.wmyt.test.app.Cell;
+package jp.wmyt.livescheduler.app.Cell;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -11,9 +11,9 @@ import android.widget.TextView;
 import java.util.Calendar;
 import java.util.List;
 
-import jp.wmyt.test.app.Master.LiveHouseTrait;
-import jp.wmyt.test.app.Master.LiveInfoTrait;
-import jp.wmyt.test.app.R;
+import jp.wmyt.livescheduler.app.Master.LiveHouseTrait;
+import jp.wmyt.livescheduler.app.Master.LiveInfoTrait;
+import jp.wmyt.livescheduler.app.R;
 
 /**
  * Created by miyata on 2014/05/25.

@@ -1,7 +1,7 @@
-package jp.wmyt.test.app.Cell;
+package jp.wmyt.livescheduler.app.Cell;
 
-import jp.wmyt.test.app.Master.LiveHouseTrait;
-import jp.wmyt.test.app.Master.LiveInfoTrait;
+import jp.wmyt.livescheduler.app.Master.LiveHouseTrait;
+import jp.wmyt.livescheduler.app.Master.LiveInfoTrait;
 
 /**
  * Created by miyata on 2014/04/28.
