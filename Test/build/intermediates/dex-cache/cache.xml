@@ -2,16 +2,16 @@
 <pre-dex-items>
 
     <item
-        dex="/Users/JP10733/LSAndroid/Test/app/build/intermediates/pre-dexed/debug/support-v13-19.1.0-432d29bb26d6067815408d15c09d69cadf2dd68d.jar"
-        jar="/Applications/Android Studio.app/sdk/extras/android/m2repository/com/android/support/support-v13/19.1.0/support-v13-19.1.0.jar"
+        dex="/Users/miyata/LSAndroid/Test/app/build/intermediates/pre-dexed/debug/support-v13-19.0.1-5756409d079947dbd07aa2197bcf182109c7247e.jar"
+        jar="/Applications/Android Studio.app/sdk/extras/android/m2repository/com/android/support/support-v13/19.0.1/support-v13-19.0.1.jar"
         jumboMode="false"
         revision="19.1.0"
-        sha1="6b852a232f642c75a7fdfc7212b841b8c8f8959c"/>
+        sha1="a4d00c1fa39c05a544fc2221af40bbf76e07c7df"/>
     <item
-        dex="/Users/JP10733/LSAndroid/Test/app/build/intermediates/pre-dexed/debug/support-v4-19.1.0-fe930dc68beb1e566675ce71b270d4091c6c249b.jar"
-        jar="/Applications/Android Studio.app/sdk/extras/android/m2repository/com/android/support/support-v4/19.1.0/support-v4-19.1.0.jar"
+        dex="/Users/miyata/LSAndroid/Test/app/build/intermediates/pre-dexed/debug/support-v4-19.0.1-3bf117e59e2e0f41bbf9219f2be90cdcf1dd583d.jar"
+        jar="/Applications/Android Studio.app/sdk/extras/android/m2repository/com/android/support/support-v4/19.0.1/support-v4-19.0.1.jar"
         jumboMode="false"
         revision="19.1.0"
-        sha1="85f201b380937e61a9dce6ca90ccf6872abbfb67"/>
+        sha1="587da9a481ffd341d2fa091704489b89845ddacd"/>
 
 </pre-dex-items>
