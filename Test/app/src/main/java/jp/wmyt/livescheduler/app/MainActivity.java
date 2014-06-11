@@ -27,6 +27,7 @@ import android.widget.ListView;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -52,7 +53,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     private static final String TAG = "DownloadActivity";
     private static final String URL = "https://s3-ap-northeast-1.amazonaws.com/tokyolive/master.bin";
-    static final String DOWNLOAD_BASE_URL = "https://s3-ap-northeast-1.amazonaws.com/tokyolive/";
+    static final String DOWNLOAD_BASE_URL = "https://s3-ap-northeast-1.amazonaws.com/tokyolive/android/";
     static final String VERSION_FILE = "version.bin";
     static final String MASTER_FILE = "master.bin";
     public static final String EX_STACK_TRACE = "exStackTrace";
@@ -62,6 +63,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
     static final String TAG_BACKSTACK_LIVE = "liveList";
 
     static boolean isCheckUpdate = true;
+
+    static Context mContext;
 
     // サイドから出てくるメニュー
     private ActionBarDrawerToggle mDrawerToggle;
@@ -74,6 +77,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mContext = this;
         setContentView(R.layout.activity_main);
         setTitleDate();
 
@@ -175,9 +179,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
         super.onStart();
 
         Common.getInstance();
-        if(isCheckUpdate) {
-            showNeedUpdateDialog(true);
-        }
+        checkUpdateMaster();
+
         isCheckUpdate = false;
     }
 
@@ -190,18 +193,16 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
 
     private String getTempPath(String fileName){
-        return getResourcePath() + fileName + ".tmp";
-    }
-
-    private String getResourcePath(){
-        return MainActivity.this.getApplicationInfo().dataDir + File.separator;
+        return fileName + ".tmp";
     }
 
     private void checkUpdateMaster(){
 
-        File localFile = new File(getResourcePath().toString() + VERSION_FILE);
-        if (!localFile.exists()) {
+        try {
+            FileInputStream fis = this.openFileInput(VERSION_FILE);
+        }catch (FileNotFoundException e){
             // 強制リトライ
+            Log.d("MainActivity", "強制リトライ");
             showNeedUpdateDialog(true);
             return;
         }
@@ -209,7 +210,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         final String srcFile = DOWNLOAD_BASE_URL + VERSION_FILE;
         // ローカルに保存するディレクトリ名
         final String dstFile = getTempPath(VERSION_FILE);
-        AsyncDownloadTask task = new AsyncDownloadTask( srcFile, dstFile, new AsyncDownloadTask.AsyncDownloadCallback() {
+        AsyncDownloadTask task = new AsyncDownloadTask( this, srcFile, dstFile, new AsyncDownloadTask.AsyncDownloadCallback() {
             @Override
             public void preExecute() {
                 //インディケータ表示
@@ -220,11 +221,13 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
                 boolean isUpdate = false;
                 try {
-                    File localFile = new File(getResourcePath().toString() + VERSION_FILE);
+                    File localFile = mContext.getFileStreamPath(VERSION_FILE);
+
                     //DL成功した時のみ判定
                     if(result == 0) {
                         int currentVersion = getInt32FromFile(localFile);
-                        int serverVersion = getInt32FromFile(new File(getTempPath(VERSION_FILE).toString()));
+                        int serverVersion = getInt32FromFile(mContext.getFileStreamPath(getTempPath(VERSION_FILE)));
+                        Log.d("MainActivity","currentVer:"+currentVersion + " serverVersion:" + serverVersion);
                         if (currentVersion < serverVersion) {
                             isUpdate = true;
                         }
@@ -255,8 +258,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
             @Override
             protected Void doInBackground(Void... params) {
                 try{
-                    File file = new File(getResourcePath() + MASTER_FILE);
-                    FileInputStream in = new FileInputStream(file);
+                    FileInputStream in = mContext.openFileInput(MASTER_FILE);
                     LoadData loadData  = new LoadData(in);
 
                     int programVersion = loadData.getInt32();
@@ -365,7 +367,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         if(isConstraint){
             final String srcFile = DOWNLOAD_BASE_URL + VERSION_FILE;
             final String dstFile = getTempPath(VERSION_FILE);
-            AsyncDownloadTask task = new AsyncDownloadTask( srcFile, dstFile, new AsyncDownloadTask.AsyncDownloadCallback() {
+            AsyncDownloadTask task = new AsyncDownloadTask( this, srcFile, dstFile, new AsyncDownloadTask.AsyncDownloadCallback() {
                 @Override
                 public void preExecute() { progressDialog.show(); }
 
@@ -393,8 +395,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private void doDownloadMasterFile(final boolean isConstraint){
         final String srcFile = DOWNLOAD_BASE_URL + MASTER_FILE;
         // ローカルに保存するディレクトリ名
-        final String dstFile = getResourcePath() + MASTER_FILE;
-        AsyncDownloadTask task = new AsyncDownloadTask( srcFile, dstFile, new AsyncDownloadTask.AsyncDownloadCallback() {
+        final String dstFile = MASTER_FILE;
+        AsyncDownloadTask task = new AsyncDownloadTask( this, srcFile, dstFile, new AsyncDownloadTask.AsyncDownloadCallback() {
             @Override
             public void preExecute() {
                 //インディケータ表示
@@ -405,10 +407,13 @@ public class MainActivity extends Activity implements View.OnClickListener {
             public void callbackExecute(int result) {
                 if(result == 0){
                     //version.binをリネーム
-                    File tempVersion = new File(getTempPath(VERSION_FILE));
+                    File tempVersion = mContext.getFileStreamPath(getTempPath(VERSION_FILE));
 
-                    if(!tempVersion.renameTo(new File(getResourcePath() + VERSION_FILE)))
-                    {
+                    File newFile = new File(tempVersion.getParent(),VERSION_FILE);
+                    if(newFile.exists()){
+                        mContext.deleteFile(VERSION_FILE);
+                    }
+                    if(!tempVersion.renameTo(newFile)){
                         Log.d("MainActivity","doDownloadMasterFile failed rename");
                     }
 

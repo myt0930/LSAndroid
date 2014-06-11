@@ -1,11 +1,14 @@
 package jp.wmyt.livescheduler.app;
 
+import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 
-import java.io.File;
+import java.io.BufferedWriter;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
@@ -29,8 +32,10 @@ public class AsyncDownloadTask extends AsyncTask<String, Integer, Integer> {
     }
 
     private AsyncDownloadCallback callback = null;
+    private Context mContext = null;
 
-    AsyncDownloadTask( String src, String dst, AsyncDownloadCallback _callback ) {
+    AsyncDownloadTask( Context context, String src, String dst, AsyncDownloadCallback _callback ) {
+        mContext = context;
         srcFile = src;
         downloadPath = dst;
         callback = _callback;
@@ -50,18 +55,8 @@ public class AsyncDownloadTask extends AsyncTask<String, Integer, Integer> {
      */
     @Override
     protected Integer doInBackground(String... params) {
-        // ダウンロード先のテンポラリ
-        File download = new File( downloadPath );
-        if( !download.exists() ) {
-            // ダウンロード用に新規ファイルを作成
-            try {
-                download.createNewFile();
-            } catch ( IOException e ) {
-                e.printStackTrace();
-            }
-        }
-
         try {
+            Log.d("AsyncDownloadTask", "path:" + srcFile + " save:" + downloadPath);
             URL url = new URL( srcFile.toString() );
             HttpURLConnection httpURLConnection = (HttpURLConnection)url.openConnection();
 
@@ -78,14 +73,17 @@ public class AsyncDownloadTask extends AsyncTask<String, Integer, Integer> {
             if( ( code == 200 ) || ( code == 206 ) ) {
                 // HTTP 通信の内容をファイルに保存するためのストリームを生成
                 InputStream inputStream = httpURLConnection.getInputStream();
-                FileOutputStream fileOutputStream = new FileOutputStream( download, true );
+//                FileOutputStream fileOutputStream = new FileOutputStream( download, true );
+                FileOutputStream out = mContext.openFileOutput(downloadPath, Context.MODE_PRIVATE);
+                OutputStreamWriter osw = new OutputStreamWriter(out);
+                BufferedWriter writer = new BufferedWriter(osw);
 
-                byte[] buffReadBytes = new byte[ 4096 ];
+                byte[] buffReadBytes = new byte[ 409600 ];
                 for( int sizeReadBytes = inputStream.read( buffReadBytes); sizeReadBytes != -1; sizeReadBytes = inputStream.read( buffReadBytes ) ) {
                     // ファイルに書き出し
-                    fileOutputStream.write( buffReadBytes, 0, sizeReadBytes );
+                    out.write( buffReadBytes, 0, sizeReadBytes );
                 }
-                fileOutputStream.close();
+                out.close();
 
                 return AsyncDownloadCallback.SUCCESS;
             }else{
