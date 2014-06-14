@@ -43,6 +43,7 @@ public class Common {
     private String searchString;
     private ArrayList<String> favList;
     private Context context;
+    private Date lastCheckUpdateDate = null;
 
     public void setContext(Context c){
         this.context = c;
@@ -72,6 +73,15 @@ public class Common {
         this.selectLiveHouseNo = selectLiveHouseNo;
     }
 
+    public Date getLastCheckUpdateDate(){
+        return this.lastCheckUpdateDate;
+    }
+
+    public void setLastCheckUpdateDate(Date lastCheckUpdateDate) {
+        Log.d("Common", "setUpdateDate::" + lastCheckUpdateDate.toString());
+        this.lastCheckUpdateDate = lastCheckUpdateDate;
+    }
+
     public void addFavoriteList(String uniqueId){
         favList.add(uniqueId);
         saveData();
@@ -90,14 +100,29 @@ public class Common {
 
     public void saveData(){
         try {
-            FileOutputStream out = context.openFileOutput("data.txt", Context.MODE_PRIVATE);
-            OutputStreamWriter osw = new OutputStreamWriter(out);
-            BufferedWriter writer = new BufferedWriter(osw);
-            for (String uniqueId : favList) {
-                writer.write(uniqueId);
-                writer.write("\n");
+            //お気に入り情報
+            {
+                FileOutputStream out = context.openFileOutput("data.txt", Context.MODE_PRIVATE);
+                OutputStreamWriter osw = new OutputStreamWriter(out);
+                BufferedWriter writer = new BufferedWriter(osw);
+                for (String uniqueId : favList) {
+                    writer.write(uniqueId);
+                    writer.write("\n");
+                }
+                writer.close();
             }
-            writer.close();
+
+            //アップデート確認時刻
+            {
+                if(lastCheckUpdateDate != null) {
+                    FileOutputStream out = context.openFileOutput("checkUpdate.txt", Context.MODE_PRIVATE);
+                    OutputStreamWriter osw = new OutputStreamWriter(out);
+                    BufferedWriter writer = new BufferedWriter(osw);
+                    writer.write(String.valueOf(lastCheckUpdateDate.getTime()));
+                    writer.close();
+                }
+            }
+
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -107,20 +132,33 @@ public class Common {
         favList.clear();
 
         try {
-//            BufferedReader reader = new BufferedReader(new FileReader("saveData"));
-//            String s;
-//            while ((s = reader.readLine()) != null) {
-//                favList.add(s);
-//            }
-            FileInputStream fis = context.openFileInput("data.txt");
-            InputStreamReader isr = new InputStreamReader(fis);
-            BufferedReader reader = new BufferedReader(isr);
+            //お気に入り情報
+            {
+                FileInputStream fis = context.openFileInput("data.txt");
+                InputStreamReader isr = new InputStreamReader(fis);
+                BufferedReader reader = new BufferedReader(isr);
 
-            String s;
-            while ((s = reader.readLine()) != null) {
-                favList.add(s);
-                Log.d("Common::readData",s);
+                String s;
+                while ((s = reader.readLine()) != null) {
+                    favList.add(s);
+                }
             }
+
+            //アップデート確認時刻
+            {
+                FileInputStream fis = context.openFileInput("checkUpdate.txt");
+                InputStreamReader isr = new InputStreamReader(fis);
+                BufferedReader reader = new BufferedReader(isr);
+
+                String s = reader.readLine();
+                if(s != null)
+                {
+                    lastCheckUpdateDate = new Date();
+                    lastCheckUpdateDate.setTime(Long.valueOf(s));
+                    Log.d("Common", "readUpdateDate::" + lastCheckUpdateDate.toString());
+                }
+            }
+
         }catch (FileNotFoundException e){
             Log.d("Common", "saveData not Found");
         }catch (IOException e){

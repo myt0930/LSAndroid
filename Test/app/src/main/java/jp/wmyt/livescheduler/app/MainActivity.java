@@ -183,7 +183,28 @@ public class MainActivity extends Activity implements View.OnClickListener {
         super.onStart();
 
         Common.getInstance();
-        checkUpdateMaster();
+
+        FragmentManager fragmentManager = getFragmentManager();
+        int backStackCount = fragmentManager.getBackStackEntryCount();
+        if( backStackCount == 0 ) {
+            boolean isNeedCheck = false;
+            Date lastCheckDate = Common.getInstance().getLastCheckUpdateDate();
+            if( lastCheckDate == null ){
+                isNeedCheck = true;
+                Log.d("", "lastCheckDate is NULL");
+            } else {
+                long elapsedTime = (new Date()).getTime() - lastCheckDate.getTime();
+                if( elapsedTime > 1000 * 60 * 5)
+                {
+                    isNeedCheck = true;
+                    Log.d("", "elapsed Time over!");
+                }
+            }
+            if(isNeedCheck) {
+                //５分以内に確認を行っていない && マスターが空っぽではない
+                checkUpdateMaster();
+            }
+        }
 
         isCheckUpdate = false;
     }
@@ -224,6 +245,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
             public void callbackExecute(int result){
 
                 boolean isUpdate = false;
+                boolean isError = false;
                 try {
                     File localFile = mContext.getFileStreamPath(VERSION_FILE);
 
@@ -239,12 +261,17 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 }catch (Exception e){
                     //TODO: エラー処理
                     e.printStackTrace();
+                    isError = true;
                 }
 
                 if(isUpdate){
                     //Updateダイアログ表示
                     showNeedUpdateDialog(false);
                 }else{
+                    //バージョン確認を実行したら(成功しなくても)、最後に確認した時間を入れる
+                    Common.getInstance().setLastCheckUpdateDate(new Date());
+                    Common.getInstance().saveData();
+
                     //更新なし
                     loadMaster();
 
@@ -422,6 +449,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
                     }
 
                     showDoneUpdateDialog();
+
+                    // 更新日時を保存する
+                    Common.getInstance().setLastCheckUpdateDate(new Date());
+                    Common.getInstance().saveData();
                 }else{
                     //リトライ
                     showRetryUpdateDialog(isConstraint);

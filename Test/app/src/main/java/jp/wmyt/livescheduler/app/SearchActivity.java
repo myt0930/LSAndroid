@@ -20,6 +20,7 @@ public class SearchActivity extends Activity {
     private static final String TAG = "SearchActivity";
     private static LiveListFragment mListFragment;
     private static SearchView mSearchView;
+    private static boolean isEnableTouch = true;
 
     // SearchVIewのリスナー
     private final SearchView.OnQueryTextListener mOnQueryTextListener = new SearchView.OnQueryTextListener() {
@@ -39,6 +40,7 @@ public class SearchActivity extends Activity {
             new AsyncTask<Void, Void, Void>() {
                 @Override
                 protected Void doInBackground(Void... params) {
+                    isEnableTouch = false;
                     Common.getInstance().setSearchString(searchText);
                     mListFragment.setCellList();
                     return null;
@@ -46,6 +48,7 @@ public class SearchActivity extends Activity {
 
                 protected void onPostExecute(Void result) {
                     mListFragment.doCellChange();
+                    isEnableTouch = true;
                 }
             }.execute();
 
