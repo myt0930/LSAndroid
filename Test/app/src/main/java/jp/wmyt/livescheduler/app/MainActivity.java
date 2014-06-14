@@ -72,6 +72,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private ListView mDrawerList;
     CustomDrawerAdapter mDrawerAdapter;
     List<DrawerItem> mDrawerDataList;
+    private MenuItem calendarIcon;
 
     static String[] dayName = {"日", "月", "火", "水", "木", "金", "土"};
 
@@ -86,9 +87,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
             mDrawerDataList = new ArrayList<DrawerItem>();
             mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
             mDrawerList = (ListView) findViewById(R.id.left_drawer);
-            mDrawerDataList.add(new DrawerItem("ホーム", R.drawable.ic_action_view_as_list));
+            mDrawerDataList.add(new DrawerItem("ホーム", R.drawable.ic_action_sort_by_size));
             mDrawerDataList.add(new DrawerItem("ライブハウス一覧", R.drawable.ic_action_view_as_list));
-            mDrawerDataList.add(new DrawerItem("お気に入り", R.drawable.ic_action_view_as_list));
+            mDrawerDataList.add(new DrawerItem("お気に入り", R.drawable.ic_action_important));
+            mDrawerDataList.add(new DrawerItem("ほかのアプリ", R.drawable.ic_action_new));
             mDrawerAdapter = new CustomDrawerAdapter(this, R.layout.custom_drawer_item, mDrawerDataList);
             mDrawerList.setAdapter(mDrawerAdapter);
 
@@ -142,7 +144,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
         Calendar day = Calendar.getInstance();
         day.setTime(date);
         String dayOfWeek = dayName[day.get(Calendar.DAY_OF_WEEK)-1];
-
+        if(calendarIcon!=null) {
+            calendarIcon.setVisible(true);
+        }
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
         String dateStr = dateFormat.format(Common.getInstance().getLiveDate());
         setTitle(dateStr + "(" + dayOfWeek + ")");
@@ -168,9 +172,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
+        calendarIcon = menu.findItem(R.id.action_calendar);
         return true;
     }
 
@@ -506,6 +510,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                     return false;
 
                 case 1:
+
                     setTitleDate();
                     break;
                 case 2:
@@ -557,6 +562,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
             liveListFragment.setCellList();
             liveListFragment.doCellChange();
         }else if( position == 1 ) {
+            calendarIcon.setVisible(false);
             /*
              *  ライブハウスリスト
              */
@@ -579,6 +585,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 fragmentManager.popBackStack(TAG_BACKSTACK_LIVEHOUSE, 0);
             }
         }else if( position == 2 ) {
+            calendarIcon.setVisible(false);
             /*
              *  お気に入り
              */
