@@ -89,10 +89,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
             mDrawerDataList = new ArrayList<DrawerItem>();
             mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
             mDrawerList = (ListView) findViewById(R.id.left_drawer);
-            mDrawerDataList.add(new DrawerItem("ホーム", R.drawable.ic_action_sort_by_size));
+            mDrawerDataList.add(new DrawerItem("今日のライブ", R.drawable.ic_action_sort_by_size));
             mDrawerDataList.add(new DrawerItem("ライブハウス一覧", R.drawable.ic_action_view_as_list));
             mDrawerDataList.add(new DrawerItem("お気に入り", R.drawable.ic_action_important));
-            mDrawerDataList.add(new DrawerItem("ほかのアプリ", R.drawable.ic_action_new));
+            //mDrawerDataList.add(new DrawerItem("ほかのアプリ", R.drawable.ic_action_new));
             mDrawerAdapter = new CustomDrawerAdapter(this, R.layout.custom_drawer_item, mDrawerDataList);
             mDrawerList.setAdapter(mDrawerAdapter);
 
@@ -139,6 +139,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
             Common.getInstance().setContext(this);
             Common.getInstance().readData();
         }
+
     }
 
     private void setTitleDate(){

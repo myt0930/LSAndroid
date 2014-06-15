@@ -29,7 +29,7 @@ public class ErrorDialogFragment extends DialogFragment {
                 try {
                     Intent intent = new Intent();
                     intent.setAction(Intent.ACTION_SENDTO);
-                    intent.setData(Uri.parse("mailto:" + "myt0930@gmail.com"));
+                    intent.setData(Uri.parse("mailto:" + "live.scheduler.app@gmail.com"));
                     intent.putExtra(Intent.EXTRA_SUBJECT, "不具合の報告");
                     intent.putExtra(Intent.EXTRA_TEXT, mExStackTrace);
                     startActivity(intent);

@@ -1,98 +1,120 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white">
+    android:orientation="vertical">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:orientation="vertical" android:layout_width="match_parent"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:gravity="center"
+        android:layout_alignParentBottom="true">
+        <net.nend.android.NendAdView
+            android:id="@+id/nend"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            NendApiKey="a675589a985054ccaafea3f77a36a40d98b4d152"
+            NendSpotId="170994" />
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginBottom="50dp"
         android:background="@color/white">
 
-        <ScrollView
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/scrollView" />
+            android:layout_height="fill_parent"
+            android:layout_marginBottom="50dp"
+            android:background="@color/white">
 
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:weightSum="1">
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:weightSum="1">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="Place"
+                    android:id="@+id/detail_place"
+                    android:paddingLeft="20dp"
+                    android:textColor="@color/red"
+                    android:textSize="16sp"
+                    android:textStyle="bold|normal"
+                    android:typeface="sans"
+                    android:paddingBottom="5dp"
+                    android:paddingRight="20dp"
+                    android:gravity="center_vertical"
+                    android:layout_marginTop="7dp" />
+
+                <RelativeLayout
+                    android:id="@+id/fav_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:gravity="right">
+
+                    <ImageButton
+                        android:layout_width="64dp"
+                        android:layout_height="64dp"
+                        android:id="@+id/fav_button"
+                        android:background="@null"
+                        android:src="@drawable/star_64"
+                        android:duplicateParentState="true" />
+                </RelativeLayout>
+            </LinearLayout>
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="Place"
-                android:id="@+id/detail_place"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="TitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitle"
+                android:id="@+id/detail_title"
+                android:textStyle="bold|normal"
+                android:textSize="11sp"
+                android:typeface="sans"
+                android:textColor="@color/blue"
                 android:paddingLeft="20dp"
-                android:textColor="@color/red"
-                android:textSize="16sp"
+                android:paddingBottom="10dp"
+                android:paddingRight="20dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="act"
+                android:id="@+id/detail_act"
+                android:layout_gravity="center_horizontal"
+                android:paddingLeft="20dp"
+                android:paddingBottom="20dp"
+                android:paddingRight="20dp"
+                android:textColor="@color/black"
+                android:textSize="12sp"
                 android:textStyle="bold|normal"
                 android:typeface="sans"
-                android:paddingBottom="5dp"
-                android:paddingRight="20dp"
-                android:gravity="center_vertical"
-                android:layout_marginTop="7dp" />
+                android:visibility="visible" />
 
-            <RelativeLayout
-                android:id="@+id/fav_view"
+            <TextView
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:gravity="right">
+                android:layout_height="wrap_content"
+                android:text="other"
+                android:id="@+id/detail_other"
+                android:layout_gravity="center_horizontal"
+                android:paddingLeft="20dp"
+                android:paddingBottom="10dp"
+                android:paddingRight="20dp"
+                android:textColor="@color/black"
+                android:textSize="11sp"
+                android:textStyle="normal"
+                android:typeface="sans"
+                android:visibility="visible" />
 
-                <ImageButton
-                    android:layout_width="64dp"
-                    android:layout_height="64dp"
-                    android:id="@+id/fav_button"
-                    android:background="@null"
-                    android:src="@drawable/star_64"
-                    android:duplicateParentState="true" />
-            </RelativeLayout>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"/>
         </LinearLayout>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="TitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitle"
-            android:id="@+id/detail_title"
-            android:textStyle="bold|normal"
-            android:textSize="11sp"
-            android:typeface="sans"
-            android:textColor="@color/blue"
-            android:paddingLeft="20dp"
-            android:paddingBottom="10dp"
-            android:paddingRight="20dp" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="act"
-            android:id="@+id/detail_act"
-            android:layout_gravity="center_horizontal"
-            android:paddingLeft="20dp"
-            android:paddingBottom="20dp"
-            android:paddingRight="20dp"
-            android:textColor="@color/black"
-            android:textSize="12sp"
-            android:textStyle="bold|normal"
-            android:typeface="sans"
-            android:visibility="visible" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="other"
-            android:id="@+id/detail_other"
-            android:layout_gravity="center_horizontal"
-            android:paddingLeft="20dp"
-            android:paddingBottom="10dp"
-            android:paddingRight="20dp"
-            android:textColor="@color/black"
-            android:textSize="11sp"
-            android:textStyle="normal"
-            android:typeface="sans"
-            android:visibility="visible" />
-    </LinearLayout>
-</ScrollView>
+    </ScrollView>
+</RelativeLayout>
