@@ -38,6 +38,8 @@ public class Common {
     static public final int LIST_TYPE_LIVEHOUSE   = 2;
     static public final int LIST_TYPE_SEARCH      = 3;
 
+    static public final int PROGRAM_VERSION       = 1;
+
     private Date liveDate;
     private int selectLiveHouseNo;
     private String searchString;

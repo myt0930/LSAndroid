@@ -14,11 +14,12 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:layout_alignParentBottom="true"
             android:gravity="center"
-            android:layout_alignParentBottom="true">
+            android:background="@color/white">
             <net.nend.android.NendAdView
                 android:id="@+id/nend"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 NendApiKey="a675589a985054ccaafea3f77a36a40d98b4d152"
                 NendSpotId="170994" />
