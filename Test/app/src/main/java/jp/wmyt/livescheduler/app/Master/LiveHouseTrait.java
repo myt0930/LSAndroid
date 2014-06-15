@@ -1,6 +1,7 @@
 package jp.wmyt.livescheduler.app.Master;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * Created by miyata on 2014/05/06.
@@ -86,7 +87,8 @@ public class LiveHouseTrait {
             traitList.add(trait);
         }
 
-
+        //ソート
+        Collections.sort(traitList, new LiveHouseTraitComparator());
     }
 
     private LiveHouseTrait initWithLiveHouseNo(int no, String name, String info, int sortNo){
