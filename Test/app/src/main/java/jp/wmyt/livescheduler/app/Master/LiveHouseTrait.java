@@ -60,7 +60,7 @@ public class LiveHouseTrait {
         return null;
     }
 
-    public LiveHouseTrait getTraitOfLiveHouseNo(int no){
+    public synchronized LiveHouseTrait getTraitOfLiveHouseNo(int no){
         for( LiveHouseTrait trait : traitList ){
             if(trait._liveHouseNo == no){
                 return trait;

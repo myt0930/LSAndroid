@@ -42,11 +42,11 @@ public class SearchActivity extends Activity {
                 protected Void doInBackground(Void... params) {
                     isEnableTouch = false;
                     Common.getInstance().setSearchString(searchText);
-                    mListFragment.setCellList();
                     return null;
                 }
 
                 protected void onPostExecute(Void result) {
+                    mListFragment.setCellList();
                     mListFragment.doCellChange();
                     isEnableTouch = true;
                 }
@@ -118,17 +118,9 @@ public class SearchActivity extends Activity {
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-
-        Log.d("SearchActivity", "onDestroy");
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case android.R.id.home:
-                Log.d("SearchActivity", "finish");
                 finish();
                 break;
         }

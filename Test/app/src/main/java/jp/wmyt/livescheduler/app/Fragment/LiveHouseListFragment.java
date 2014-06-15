@@ -3,7 +3,6 @@ package jp.wmyt.livescheduler.app.Fragment;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -33,7 +32,6 @@ public class LiveHouseListFragment extends android.app.ListFragment{
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        Log.d("out", "onActivity");
         Activity activity = getActivity();
         mListView = getListView();
 
@@ -86,7 +84,6 @@ public class LiveHouseListFragment extends android.app.ListFragment{
     public void onListItemClick(ListView l, View v, int position, long id) {
         // TODO Auto-generated method stub
         super.onListItemClick(l, v, position, id);
-        Log.d("out::", String.valueOf(position) + "onListItemClick");
 
         //listener.onFragmentListClick(rows[position]);
     }

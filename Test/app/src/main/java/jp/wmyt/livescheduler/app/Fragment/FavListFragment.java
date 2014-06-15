@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.ListFragment;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,7 +41,6 @@ public class FavListFragment  extends ListFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        Log.d("out", "onActivity");
         Activity activity = getActivity();
 
         mListView = getListView();
@@ -69,7 +67,6 @@ public class FavListFragment  extends ListFragment {
 
     @Override
     public void onResume() {
-        Log.d("FavListFragment","onResume");
         setCellList();
         doCellChange();
         super.onResume();
@@ -95,7 +92,6 @@ public class FavListFragment  extends ListFragment {
     public void onListItemClick(ListView l, View v, int position, long id) {
         // TODO Auto-generated method stub
         super.onListItemClick(l, v, position, id);
-        Log.d("out::",String.valueOf(position) + "onListItemClick");
 
         //listener.onFragmentListClick(rows[position]);
     }

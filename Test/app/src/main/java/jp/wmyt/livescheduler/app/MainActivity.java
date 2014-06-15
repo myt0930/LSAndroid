@@ -62,7 +62,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     static final String TAG_BACKSTACK_FAV = "fav";
     static final String TAG_BACKSTACK_LIVE = "liveList";
 
-    static boolean isCheckUpdate = true;
+    static boolean isCheckUpdate;
 
     static Context mContext;
 
@@ -81,6 +81,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
         mContext = this;
         setContentView(R.layout.activity_main);
         setTitleDate();
+
+        isCheckUpdate = true;
 
         // サイドから出てくるメニュー
         {
@@ -184,29 +186,32 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         Common.getInstance();
 
-        FragmentManager fragmentManager = getFragmentManager();
-        int backStackCount = fragmentManager.getBackStackEntryCount();
-        if( backStackCount == 0 ) {
-            boolean isNeedCheck = false;
-            Date lastCheckDate = Common.getInstance().getLastCheckUpdateDate();
-            if( lastCheckDate == null ){
-                isNeedCheck = true;
-                Log.d("", "lastCheckDate is NULL");
-            } else {
-                long elapsedTime = (new Date()).getTime() - lastCheckDate.getTime();
-                if( elapsedTime > 1000 * 60 * 5)
-                {
+        if(isCheckUpdate){
+            checkUpdateMaster();
+            isCheckUpdate = false;
+        }else{
+            FragmentManager fragmentManager = getFragmentManager();
+            int backStackCount = fragmentManager.getBackStackEntryCount();
+            if( backStackCount == 0 ) {
+                boolean isNeedCheck = false;
+                Date lastCheckDate = Common.getInstance().getLastCheckUpdateDate();
+                if( lastCheckDate == null ){
                     isNeedCheck = true;
-                    Log.d("", "elapsed Time over!");
+                    Log.d("", "lastCheckDate is NULL");
+                } else {
+                    long elapsedTime = (new Date()).getTime() - lastCheckDate.getTime();
+                    if( elapsedTime > 1000 * 60 * 5)
+                    {
+                        isNeedCheck = true;
+                        Log.d("", "elapsed Time over!");
+                    }
+                }
+                if(isNeedCheck) {
+                    //５分以内に確認を行っていない && マスターが空っぽではない
+                    checkUpdateMaster();
                 }
             }
-            if(isNeedCheck) {
-                //５分以内に確認を行っていない && マスターが空っぽではない
-                checkUpdateMaster();
-            }
         }
-
-        isCheckUpdate = false;
     }
 
     @Override
@@ -357,7 +362,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         AlertDialog.Builder progress = new AlertDialog.Builder( MainActivity.this );
         progress.setTitle("データ更新");
         progress.setMessage(isConstraint    ? "ライブ情報の更新に失敗しました。ネットワーク環境の良い場所でリトライして下さい。"
-                                            : "ライブ情報の更新に失敗しました。\\nリトライしますか？\\n(ネットワーク環境の良い場所で行ってください。)");
+                                            : "ライブ情報の更新に失敗しました。\nリトライしますか？\n(ネットワーク環境の良い場所で行ってください。)");
         progress.setPositiveButton("リトライ",
                 new DialogInterface.OnClickListener() {
                     @Override

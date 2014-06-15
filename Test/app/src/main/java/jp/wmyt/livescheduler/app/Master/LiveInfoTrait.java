@@ -90,7 +90,7 @@ public class LiveInfoTrait {
         traitList.clear();
     }
 
-    public ArrayList<LiveInfoTrait> getTraitListOfDate(Date date){
+    public synchronized ArrayList<LiveInfoTrait> getTraitListOfDate(Date date){
         ArrayList liveList = new ArrayList();
         long dateTime = date.getTime() / 1;
         for(LiveInfoTrait trait : traitList){
@@ -111,7 +111,7 @@ public class LiveInfoTrait {
         return liveList;
     }
 
-    public ArrayList<LiveInfoTrait> getTraitListOfLiveHouseNo(int liveHouseNo){
+    public synchronized ArrayList<LiveInfoTrait> getTraitListOfLiveHouseNo(int liveHouseNo){
         ArrayList<LiveInfoTrait> liveList = new ArrayList();
 
         Date currentDate = new Date();
@@ -127,7 +127,7 @@ public class LiveInfoTrait {
         return liveList;
     }
 
-    public ArrayList<LiveInfoTrait> getTraitListOfContainsText(String searchStr){
+    public synchronized ArrayList<LiveInfoTrait> getTraitListOfContainsText(String searchStr){
         ArrayList liveList = new ArrayList();
         if(searchStr == null){
             return liveList;
@@ -154,7 +154,7 @@ public class LiveInfoTrait {
         return liveList;
     }
 
-    public ArrayList<LiveInfoTrait> getTraitListOfFavorite(){
+    public synchronized ArrayList<LiveInfoTrait> getTraitListOfFavorite(){
         ArrayList liveList = new ArrayList();
         for(LiveInfoTrait trait : traitList){
             if(trait.isPastLive()){

@@ -3,9 +3,7 @@ package jp.wmyt.livescheduler.app;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 
 import jp.wmyt.livescheduler.app.Fragment.LiveListFragment;
@@ -38,17 +36,9 @@ public class SubActivity extends Activity {
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-
-        Log.d("SubActivity", "onDestroy");
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case android.R.id.home:
-                Log.d("SubActivity", "finish");
                 finish();
                 break;
         }
