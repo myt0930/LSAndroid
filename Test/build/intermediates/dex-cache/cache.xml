@@ -2,25 +2,25 @@
 <pre-dex-items>
 
     <item
-        dex="/Users/JP10733/LSAndroid/Test/app/build/intermediates/pre-dexed/debug/nendSDK-2.3.3-981e1f2b42da840b883b5b52115fb9055c6a8cea.jar"
+        dex="/Users/JP10733/LSAndroid/Test/app/build/intermediates/pre-dexed/release/nendSDK-2.3.3-981e1f2b42da840b883b5b52115fb9055c6a8cea.jar"
         jar="/Users/JP10733/LSAndroid/Test/app/libs/nendSDK-2.3.3.jar"
         jumboMode="false"
         revision="19.1.0"
         sha1="f157164357728e7c1d7943b016866abafb3df697"/>
     <item
-        dex="/Users/JP10733/LSAndroid/Test/app/build/intermediates/pre-dexed/debug/support-v13-19.1.0-432d29bb26d6067815408d15c09d69cadf2dd68d.jar"
+        dex="/Users/JP10733/LSAndroid/Test/app/build/intermediates/pre-dexed/release/support-v13-19.1.0-432d29bb26d6067815408d15c09d69cadf2dd68d.jar"
         jar="/Applications/Android Studio.app/sdk/extras/android/m2repository/com/android/support/support-v13/19.1.0/support-v13-19.1.0.jar"
         jumboMode="false"
         revision="19.1.0"
         sha1="6b852a232f642c75a7fdfc7212b841b8c8f8959c"/>
     <item
-        dex="/Users/JP10733/LSAndroid/Test/app/build/intermediates/pre-dexed/debug/GameFeatSDK-f918652cda311378588bbf2e3b7a1b9f87951547.jar"
+        dex="/Users/JP10733/LSAndroid/Test/app/build/intermediates/pre-dexed/release/GameFeatSDK-f918652cda311378588bbf2e3b7a1b9f87951547.jar"
         jar="/Users/JP10733/LSAndroid/Test/app/libs/GameFeatSDK.jar"
         jumboMode="false"
         revision="19.1.0"
         sha1="22db9bb266f9564d61bc9bf1befbf8eace247cb5"/>
     <item
-        dex="/Users/JP10733/LSAndroid/Test/app/build/intermediates/pre-dexed/debug/support-v4-19.1.0-fe930dc68beb1e566675ce71b270d4091c6c249b.jar"
+        dex="/Users/JP10733/LSAndroid/Test/app/build/intermediates/pre-dexed/release/support-v4-19.1.0-fe930dc68beb1e566675ce71b270d4091c6c249b.jar"
         jar="/Applications/Android Studio.app/sdk/extras/android/m2repository/com/android/support/support-v4/19.1.0/support-v4-19.1.0.jar"
         jumboMode="false"
         revision="19.1.0"
