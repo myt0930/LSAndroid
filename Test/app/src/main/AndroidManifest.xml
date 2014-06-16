@@ -40,6 +40,29 @@
             android:label="検索"
             android:screenOrientation="portrait">
         </activity>
+        <!-- GameFeat START -->
+        <meta-data android:name="gamefeat_site_id" android:value="6570" />
+        <activity
+            android:name="jp.basicinc.gamefeat.android.sdk.view.GameFeatAppActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="GameFeat" >
+        </activity>
+        <activity
+            android:name="jp.basicinc.gamefeat.android.sdk.view.GameFeatAppChildActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="GameFeat"
+            android:screenOrientation="sensor" >
+        </activity>
+        <receiver
+            android:name="jp.basicinc.gamefeat.android.sdk.receiver.GameFeatBroadcastReceiver"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_ADDED"/>
+                <data android:scheme="package"/>
+            </intent-filter>
+        </receiver>
+        <!-- GameFeat END -->
     </application>
 
 </manifest>

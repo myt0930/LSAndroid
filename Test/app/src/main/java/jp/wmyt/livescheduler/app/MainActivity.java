@@ -37,6 +37,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import jp.basicinc.gamefeat.android.sdk.controller.GameFeatAppController;
+import jp.basicinc.gamefeat.android.sdk.view.GameFeatIconView;
 import jp.wmyt.livescheduler.app.Fragment.ErrorDialogFragment;
 import jp.wmyt.livescheduler.app.Fragment.FavListFragment;
 import jp.wmyt.livescheduler.app.Fragment.LiveHouseListFragment;
@@ -73,6 +75,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     CustomDrawerAdapter mDrawerAdapter;
     List<DrawerItem> mDrawerDataList;
     private MenuItem calendarIcon;
+    private GameFeatAppController mGameFeatController;
 
     static String[] dayName = {"日", "月", "火", "水", "木", "金", "土"};
 
@@ -92,7 +95,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
             mDrawerDataList.add(new DrawerItem("今日のライブ", R.drawable.ic_action_sort_by_size));
             mDrawerDataList.add(new DrawerItem("ライブハウス一覧", R.drawable.ic_action_view_as_list));
             mDrawerDataList.add(new DrawerItem("お気に入り", R.drawable.ic_action_important));
-            //mDrawerDataList.add(new DrawerItem("ほかのアプリ", R.drawable.ic_action_new));
+            mDrawerDataList.add(new DrawerItem("ほかのアプリ", R.drawable.ic_action_new));
             mDrawerAdapter = new CustomDrawerAdapter(this, R.layout.custom_drawer_item, mDrawerDataList);
             mDrawerList.setAdapter(mDrawerAdapter);
 
@@ -140,6 +143,21 @@ public class MainActivity extends Activity implements View.OnClickListener {
             Common.getInstance().readData();
         }
 
+        // GAMEFEAT初期化
+        {
+            mGameFeatController = new GameFeatAppController();
+            mGameFeatController.init(this);
+
+            mGameFeatController.setRefreshInterval(20);
+            mGameFeatController.setIconTextColor(getResources().getColor(R.color.black));
+
+            ((GameFeatIconView) findViewById(R.id.gf_icon1)).addLoader(mGameFeatController);
+            ((GameFeatIconView) findViewById(R.id.gf_icon2)).addLoader(mGameFeatController);
+            ((GameFeatIconView) findViewById(R.id.gf_icon3)).addLoader(mGameFeatController);
+            ((GameFeatIconView) findViewById(R.id.gf_icon4)).addLoader(mGameFeatController);
+            ((GameFeatIconView) findViewById(R.id.gf_icon5)).addLoader(mGameFeatController);
+            //((GameFeatIconView) findViewById(R.id.gf_icon6)).addLoader(mGameFeatController);
+        }
     }
 
     private void setTitleDate(){
@@ -213,6 +231,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 }
             }
         }
+
+        // GAMEFEAT広告設定の初期化
+        mGameFeatController.activateGF(this, false, true, false);
     }
 
     @Override
@@ -221,7 +242,17 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mGameFeatController.startIconAd();
+    }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mGameFeatController.stopIconAd();
+    }
 
     private String getTempPath(String fileName){
         return fileName + ".tmp";
@@ -642,7 +673,11 @@ public class MainActivity extends Activity implements View.OnClickListener {
             }else{
                 fragmentManager.popBackStack(TAG_BACKSTACK_FAV, 0);
             }
+        }else if( position == 3 ){
+            //おすすめアプリ
+            mGameFeatController.show(this);
         }
+
 //        fragment.setCellList();
 
         // Highlight the selected item, update the title, and close the drawer
